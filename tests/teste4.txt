@@ -1,18 +1,14 @@
 (START)
-( ( (10.0 5.0 *) (2 3 +) - ) 2.0 ^ )
-( ( (0 RES) 10.5 | ) ( 2 4 % ) * )
-( ( (10 2 /) 5.0 + ) MEMORIA)
-( ( (MEMORIA) 100 > ) ( (MEMORIA) 2 * ) ( (MEMORIA) 2 / ) IFELSE )
-( 0 ITERADOR )
-( ( (ITERADOR) 5 != ) ( ( (ITERADOR) 1 + ) ITERADOR ) WHILE )
-( ( 10 5 + ) ( 2 1 - ) ( 5 5 * ) IFELSE )
-((6 3 <=) (1 RES) (0 RES) IFELSE)
-((20 2 >=) (1 RES) (0 RES) IFELSE)
-( ( 10 3 / ) ( 10 3 % ) + )
-( ( ( ( 2 2 ^ ) 2 ^ ) 2 ^ ) RESULTADO )
-( RESULTADO )
-( 0 CONTADOR )
-( ( (CONTADOR) 5 < ) ( ( (CONTADOR) 1 + ) CONTADOR ) WHILE )
-( ( (CONTADOR) 5 == ) ( 12 SAIDA ) ( 2026 SAIDA ) IFELSE )
-( SAIDA )
+*{ teste4: casos de ERRO SEMANTICO intencionais sob tipagem estrita }*
+(10 2.5 +) *{ mistura int com real }*
+(10 3.0 /) *{ divisao inteira exige operandos inteiros }*
+(7.5 2 %) *{ resto exige operandos inteiros }*
+(TRUE 5 +) *{ operando logico em operacao aritmetica }*
+(10 2.5 <) *{ relacional comparando tipos diferentes }*
+(5 100 200 IFELSE) *{ condicao do IFELSE nao e logica }*
+((1 1 ==) (10) (2.0) IFELSE) *{ ramos do IFELSE com tipos diferentes }*
+(10 X)
+(2.0 X) *{ reatribui X (int) com real - viola tipagem forte }*
+((10) (1) WHILE) *{ condicao do WHILE nao e logica }*
+(NAOEXISTE) *{ uso de variavel nunca definida }*
 (END)

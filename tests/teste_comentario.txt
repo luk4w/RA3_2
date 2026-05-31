@@ -1,17 +1,18 @@
-(START) *{Rubrica completa? 10/10}*
+*{ teste_comentario: foco em comentarios nas tres posicoes - programa valido }*
+(START) *{ comentario no fim de uma linha de codigo }*
 (10.5 2.5 +)
-(50.0 10.0 -)
-(3.0 4.0 *)
+(50.0 10.0 -) *{ subtracao real }* (3.0 4.0 *) *{ comentario entre duas expressoes }*
 (10.0 3.0 |)
+*{ comentario de linha inteira no meio do programa }*
 (15 4 /)
 (10 3 %)
 (2 3 ^)
-(100.0 GLOBAL)
+(100.0 GLOBAL) *{ define variavel real }*
 (GLOBAL)
 (0 RES)
-((10 10 ==) (1 RES) (0 RES) IFELSE)
+((10 10 ==) (1 RES) (0 RES) IFELSE) *{ decisao com condicao logica }*
 (0 CONTADOR)
 (((CONTADOR) 5 <=) (((CONTADOR) 1 +) CONTADOR) WHILE)
 (CONTADOR)
-((10 10 *) 2.0 /)
+((10 10 *) 2 /) *{ divisao inteira: 100 / 2 = 50 }*
 (END)
