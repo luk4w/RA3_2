@@ -125,120 +125,88 @@ Carrega na pilha da FPU o valor atual armazenado na variável identificada. Se a
 ((CONTADOR) 1 +)
 ```
 
+## Sistema de Tipos
+
+A linguagem é **estática e fortemente tipada**, com três tipos:
+
+| Tipo | Descrição | Literais |
+| :--- | :--- | :--- |
+| `int` | inteiro | `42`, `0`, `1024` (sem ponto decimal) |
+| `real` | ponto flutuante (`double` IEEE 754) | `3.14`, `10.0`, `0.5` (com ponto) |
+| `bool` | lógico | `TRUE`, `FALSE` e resultados de operadores relacionais |
+
+O tipo das variáveis é **inferido pelo contexto** de uso e **fixado** na primeira
+definição (não pode mudar depois). **Não há coerção implícita** entre `int` e
+`real`: misturar os dois numa mesma operação é erro semântico.
+
+| Operador | Operandos exigidos | Resultado |
+| :--- | :--- | :--- |
+| `+` `-` `*` | mesmo tipo numérico | mesmo tipo |
+| `\|` (divisão real) | mesmo tipo numérico | `real` |
+| `^` (potência) | mesmo tipo numérico | mesmo tipo |
+| `/` `%` (divisão inteira, resto) | **apenas `int`** | `int` |
+| `== != < > <= >=` | mesmo tipo | `bool` |
+| `IFELSE` | condição `bool`; ramos do mesmo tipo | tipo dos ramos |
+| `WHILE` | condição `bool` | tipo do corpo |
+
+As regras formais em **cálculo de sequentes** estão em
+[`REGRAS_TIPOS.md`](REGRAS_TIPOS.md).
+
+### Exemplos válidos e inválidos
+
+```
+*{ VALIDOS }*
+(10 3 +)                 *{ int + int -> int }*
+(10.5 2.5 *)             *{ real * real -> real }*
+(20 6 /)                 *{ divisao inteira -> int }*
+(9.0 2.0 |)              *{ divisao real -> real }*
+((CONTADOR) 50 >=)       *{ relacional -> bool }*
+((X 0 >) (X) (0 X) IFELSE)   *{ condicao bool, ramos compativeis }*
+
+*{ INVALIDOS (erro semantico) }*
+(10 2.5 +)               *{ mistura int com real }*
+(10 3.0 /)               *{ divisao inteira exige inteiros }*
+(TRUE 5 +)               *{ operando logico em aritmetica }*
+(5 100 200 IFELSE)       *{ condicao do IFELSE nao e bool }*
+```
+
+Veja `tests/teste1.txt`..`teste3.txt` (programas válidos completos) e
+`tests/teste4.txt` (erros semânticos intencionais).
+
 ## Gramática EBNF LL(1) Fatorada
 
 Para garantir que o Analisador SEMÂNTICO opere de forma determinística, a gramática em Notação Polonesa Reversa (RPN) foi submetida à Fatoração à Esquerda. Isso eliminou os conflitos de derivação, e resultou na seguinte estrutura formal:
 
-**Regras de Produção:**
-1. `programa -> PARENTESE_ESQ START PARENTESE_DIR sequencia_execucao`
-2. `sequencia_execucao -> PARENTESE_ESQ avaliacao_sequencia`
-3. `avaliacao_sequencia -> END PARENTESE_DIR | corpo_expressao PARENTESE_DIR sequencia_execucao`
-4. `expressao_aninhada -> PARENTESE_ESQ corpo_expressao PARENTESE_DIR`
-5. `operando -> NUMERO | expressao_aninhada`
-6. `corpo_expressao -> operando complemento_expressao | IDENTIFICADOR`
-7. `complemento_expressao -> operando operacao | IDENTIFICADOR | RES | ε`
-8. `operacao -> OPERADOR | OPERADOR_RELACIONAL | operando IFELSE | WHILE`
+**Regras de Produção (EBNF):**
+
+```ebnf
+programa              = "(" , "START" , ")" , sequencia_execucao ;
+sequencia_execucao    = "(" , avaliacao_sequencia ;
+avaliacao_sequencia   = "END" , ")" | corpo_expressao , ")" , sequencia_execucao ;
+expressao_aninhada    = "(" , corpo_expressao , ")" ;
+operando              = NUMERO | TRUE | FALSE | IDENTIFICADOR | RES | expressao_aninhada ;
+corpo_expressao       = operando , complemento_expressao ;
+complemento_expressao = operando , resto_complemento | ε ;
+resto_complemento     = operacao | ε ;
+operacao              = OPERADOR | OPERADOR_RELACIONAL | WHILE | operando , "IFELSE" ;
+```
 
 ### Dicionário de Símbolos
 
 **Terminais (Tokens):**
-`PARENTESE_ESQ`, `PARENTESE_DIR`, `START`, `END`, `NUMERO`, `IDENTIFICADOR`, `OPERADOR`, `OPERADOR_RELACIONAL`, `IFELSE`, `WHILE`
+`PARENTESE_ESQ`, `PARENTESE_DIR`, `START`, `END`, `NUMERO`, `IDENTIFICADOR`, `OPERADOR`, `OPERADOR_RELACIONAL`, `IFELSE`, `WHILE`, `RES`, `TRUE`, `FALSE`
 
-**Não-Terminais (Variáveis da AST):**
-`programa`, `sequencia_execucao`, `avaliacao_sequencia`, `expressao_aninhada`, `operando`, `corpo_expressao`, `complemento_expressao`, `operacao`
+**Não-Terminais:**
+`programa`, `sequencia_execucao`, `avaliacao_sequencia`, `expressao_aninhada`, `operando`, `corpo_expressao`, `complemento_expressao`, `resto_complemento`, `operacao`
 
-### Conjuntos FIRST e FOLLOW
+### Gramática atribuída, FIRST/FOLLOW e tabela LL(1)
 
-O cálculo teórico exigido para provar a ausência de conflitos ambíguos na árvore sintática:
-
-#### Conjuntos FIRST
-* **FIRST(programa)** = { `PARENTESE_ESQ` }
-* **FIRST(sequencia_execucao)** = { `PARENTESE_ESQ` }
-* **FIRST(avaliacao_sequencia)** = { `END`, `IDENTIFICADOR`, `NUMERO`, `PARENTESE_ESQ` }
-* **FIRST(expressao_aninhada)** = { `PARENTESE_ESQ` }
-* **FIRST(operando)** = { `NUMERO`, `PARENTESE_ESQ` }
-* **FIRST(corpo_expressao)** = { `IDENTIFICADOR`, `NUMERO`, `PARENTESE_ESQ` }
-* **FIRST(complemento_expressao)** = { `IDENTIFICADOR`, `NUMERO`, `PARENTESE_ESQ`, `RES`, `ε` }
-* **FIRST(operacao)** = { `NUMERO`, `OPERADOR`, `OPERADOR_RELACIONAL`, `PARENTESE_ESQ`, `WHILE` }
-
-#### Conjuntos FOLLOW
-* **FOLLOW(programa)** = { `$` }
-* **FOLLOW(sequencia_execucao)** = { `$` }
-* **FOLLOW(avaliacao_sequencia)** = { `$` }
-* **FOLLOW(expressao_aninhada)** = { `IDENTIFICADOR`, `IFELSE`, `NUMERO`, `OPERADOR`, `OPERADOR_RELACIONAL`, `PARENTESE_ESQ`, `RES`, `WHILE` }
-* **FOLLOW(operando)** = { `IDENTIFICADOR`, `IFELSE`, `NUMERO`, `OPERADOR`, `OPERADOR_RELACIONAL`, `PARENTESE_ESQ`, `RES`, `WHILE` }
-* **FOLLOW(corpo_expressao)** = { `PARENTESE_DIR` }
-* **FOLLOW(complemento_expressao)** = { `PARENTESE_DIR` }
-* **FOLLOW(operacao)** = { `PARENTESE_DIR` }
-
-### Tabela de Parsing LL(1)
-
-A tabela LL(1) serve para guiar o parser preditivo descendente na determinação de qual regra gramatical (produção) deve ser aplicada a seguir, sem precisar de backtracking.
-
-Células vazias indicam erro SEMÂNTICO. $\epsilon$ indica derivação para vazio.
-
-#### Formato compacto
-`M[Não-terminal, Terminal] = Produção`
-```
-M[avaliacao_sequencia, END] = { END PARENTESE_DIR }
-M[avaliacao_sequencia, IDENTIFICADOR] = { corpo_expressao PARENTESE_DIR sequencia_execucao }
-M[avaliacao_sequencia, NUMERO] = { corpo_expressao PARENTESE_DIR sequencia_execucao }
-M[avaliacao_sequencia, PARENTESE_ESQ] = { corpo_expressao PARENTESE_DIR sequencia_execucao }
-M[complemento_expressao, IDENTIFICADOR] = { IDENTIFICADOR }
-M[complemento_expressao, NUMERO] = { operando operacao }
-M[complemento_expressao, PARENTESE_DIR] = { EPSILON }
-M[complemento_expressao, PARENTESE_ESQ] = { operando operacao }
-M[complemento_expressao, RES] = { RES }
-M[corpo_expressao, IDENTIFICADOR] = { IDENTIFICADOR }
-M[corpo_expressao, NUMERO] = { operando complemento_expressao }
-M[corpo_expressao, PARENTESE_ESQ] = { operando complemento_expressao }
-M[expressao_aninhada, PARENTESE_ESQ] = { PARENTESE_ESQ corpo_expressao PARENTESE_DIR }
-M[operacao, NUMERO] = { operando IFELSE }
-M[operacao, OPERADOR] = { OPERADOR }
-M[operacao, OPERADOR_RELACIONAL] = { OPERADOR_RELACIONAL }
-M[operacao, PARENTESE_ESQ] = { operando IFELSE }
-M[operacao, WHILE] = { WHILE }
-M[operando, NUMERO] = { NUMERO }
-M[operando, PARENTESE_ESQ] = { expressao_aninhada }
-M[programa, PARENTESE_ESQ] = { PARENTESE_ESQ START PARENTESE_DIR sequencia_execucao }
-M[sequencia_execucao, PARENTESE_ESQ] = { PARENTESE_ESQ avaliacao_sequencia }
-```
+Os conjuntos **FIRST/FOLLOW**, a **tabela de parsing LL(1)** completa e os
+**atributos semânticos** (nó da AST e tipo inferido de cada produção) estão
+documentados em **[`GRAMATICA.md`](GRAMATICA.md)** — calculados dinamicamente por
+`src/gramatica.cpp` e impressos no início de cada execução. A ausência de colisões
+em qualquer célula `M[A, t]` comprova que a gramática é **LL(1)**.
  
-#### Formato tabular
- 
-| Não-Terminal | `(` | `)` | `START` | `END` | `NUMERO` | `ID` | `OPERADOR` | `OP_REL` | `IFELSE` | `WHILE` | `RES` |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **programa** | 1 | | | | | | | | | | |
-| **sequencia_execucao** | 2 | | | | | | | | | | |
-| **avaliacao_sequencia** | 3b | | | 3a | 3b | 3b | | | | | |
-| **expressao_aninhada** | 4 | | | | | | | | | | |
-| **operando** | 5b | | | | 5a | | | | | | |
-| **corpo_expressao** | 6a | | | | 6a | 6b | | | | | |
-| **complemento_expressao** | 7a | 7d | | | 7a | 7b | | | | | 7c |
-| **operacao** | 8c | | | | 8c | | 8a | 8b | | 8d | |
- 
-#### Legenda
-| Código | Produção |
-| :--- | :--- |
-| **1** | `PARENTESE_ESQ START PARENTESE_DIR sequencia_execucao` |
-| **2** | `PARENTESE_ESQ avaliacao_sequencia` |
-| **3a** | `END PARENTESE_DIR` |
-| **3b** | `corpo_expressao PARENTESE_DIR sequencia_execucao` |
-| **4** | `PARENTESE_ESQ corpo_expressao PARENTESE_DIR` |
-| **5a** | `NUMERO` |
-| **5b** | `expressao_aninhada` |
-| **6a** | `operando complemento_expressao` |
-| **6b** | `IDENTIFICADOR` |
-| **7a** | `operando operacao` |
-| **7b** | `IDENTIFICADOR` |
-| **7c** | `RES` |
-| **7d** | `ε` |
-| **8a** | `OPERADOR` |
-| **8b** | `OPERADOR_RELACIONAL` |
-| **8c** | `operando IFELSE` |
-| **8d** | `WHILE` |
-
-
 ## Tratamento e Recuperação de Erros
 
 O analisador implementa **recuperação de erros** (*panic mode*) com granularidade de **linha**: ao encontrar um erro, ele **não interrompe** a análise no primeiro problema — registra o erro e prossegue, de modo a reportar **todos** os erros do programa em uma única execução.
@@ -315,11 +283,34 @@ A coincidência bit-a-bit entre o cálculo teórico e a saída do hardware valid
 
 ## Saídas da Última Execução
 
-Os artefatos gerados pela última execução do compilador (`teste2.txt`) estão organizados no diretório [`output/`](output/):
+A cada execução o programa **sobrescreve** os artefatos no diretório de onde foi
+executado (ex.: `build/Release/`, ignorado pelo `.gitignore`). Para registro, uma
+cópia dos artefatos da última execução válida — gerada com **`tests/teste2.txt`** —
+está versionada no diretório [`output/`](output/):
 
 | Arquivo | Descrição |
 | :--- | :--- |
-| [`output/ast_saida.json`](output/ast_saida.json) | Árvore Sintática Abstrata (AST) serializada em JSON, produzida pelo parser LL(1) a partir do arquivo de entrada mais recente. |
-| [`output/saida.s`](output/saida.s) | Código Assembly ARMv7 gerado pelo backend (`armv7_generator`), pronto para execução no simulador CPUlator-ARMv7 DEC1-SOC (v16.1). |
+| [`output/tokens.txt`](output/tokens.txt) | Vetor de tokens (saída do analisador léxico). |
+| [`output/ast_saida.json`](output/ast_saida.json) | Árvore sintática **atribuída** (com `tipoDado` em cada nó), serializada em JSON. |
+| [`output/ARVORE_ATRIBUIDA.md`](output/ARVORE_ATRIBUIDA.md) | Árvore atribuída em Markdown (categoria semântica + tipo de cada nó). |
+| [`output/TABELA_SIMBOLOS.md`](output/TABELA_SIMBOLOS.md) | Tabela de símbolos com tipos inferidos, linha de definição e usos. |
+| [`output/saida.s`](output/saida.s) | Código Assembly ARMv7 para o simulador CPUlator-ARMv7 DEC1-SOC (v16.1). |
 
-A AST é gerada pela função `gerarArvore()` em `include/parser.hpp` e exportada via `exportarAST()` em `include/ast_exporter.hpp`. O assembly é produzido pela função `gerarAssembly()` em `include/armv7_generator.hpp`. Ambos os arquivos são sobrescritos a cada execução do programa na pasta `build/Release/` que está ignorada pelo `.gitignore`
+> O Assembly é gerado **somente** quando não há erros léxicos/sintáticos/semânticos.
+> A AST é construída por `gerarArvore()` (`include/parser.hpp`) e exportada por
+> `exportarAST()` (`include/ast_exporter.hpp`); o Assembly por `gerarAssembly()`
+> (`include/armv7_generator.hpp`).
+
+## Documentação (Artefatos de Entrega)
+
+| Documento | Conteúdo |
+| :--- | :--- |
+| [`GRAMATICA.md`](GRAMATICA.md) | Gramática atribuída em EBNF, FIRST/FOLLOW e tabela LL(1). |
+| [`REGRAS_TIPOS.md`](REGRAS_TIPOS.md) | Sistema de regras de tipos em cálculo de sequentes. |
+| [`TABELA_SIMBOLOS.md`](TABELA_SIMBOLOS.md) | Tabela de símbolos da última execução. |
+| [`ARVORE_ATRIBUIDA.md`](ARVORE_ATRIBUIDA.md) | Árvore sintática atribuída da última execução. |
+| [`ERROS_SEMANTICOS.md`](ERROS_SEMANTICOS.md) | Relatório de erros da última execução (gerado mesmo se vazio). |
+
+Os testes unitários por módulo (léxico, parser, tabela de símbolos e verificação
+de tipos) são executados automaticamente no início de cada execução do programa
+(`include/testes.hpp`).
