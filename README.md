@@ -6,7 +6,8 @@ Nome do grupo no Canvas: RA3 2
 Instituição: Pontifícia Universidade Católica do Paraná (PUCPR)  
 Disciplina: Linguagens Formais e Compiladores
 Professor: Frank de Alcantara  
-Ano: 2026
+Ano: 2026  
+Linguagem de implementação: C++ (padrão C++23)
 
 > Devido a plataforma do github não permitir a criação de repositórios com espaços, o nome do grupo foi alterado para RA3_2, no entanto, o nome real do grupo é RA3 2.
 
@@ -25,17 +26,31 @@ Certifique-se de ter os seguintes componentes instalados:
   * `CMake Tools` (Microsoft)
 
 #### Metodo 1: Compilação via Visual Studio Code
-A extensão [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) automatiza o os comandos de configuração e construção, simplificando o processo. Siga os passos abaixo:
+A extensão [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) automatiza os comandos de configuração e construção, o que simplifica o processo. Siga os passos abaixo:
 
 1. Abra a pasta raiz do projeto no Visual Studio Code (`File > Open Folder...`).
 2. A extensão identificará o arquivo `CMakeLists.txt` então, através da paleta de comandos `Ctrl+Shift+p`, ou o atalho que você configurou, selecione um **Kit** de compilação, escolha a arquitetura nativa do MSVC (ex: `Visual Studio Community 2022 Release - x86_amd64`).
 3. Aguarde o processo de configuração (*Configuring*) terminar. O CMake irá gerar a árvore de diretórios e o *cache* de compilação.
 4. Utilize o atalho `Ctrl+Shift+p` para abrir a paleta de comandos, e execute `CMake: Build` para iniciar a compilação do projeto.
-5. Se não houver erros, o executável final (`AnalisadorSemantico.exe`) será gerado dentro do diretório `build/Debug/` (ou `build/Release/`), dependendo da configuração selecionada.
+5. Se não houver erros, o executável final (`AnalisadorSemantico.exe`) será gerado dentro do diretório `build/Debug/` (ou `build/Release/`), conforme a configuração selecionada.
+
+#### Metodo 2: Compilação via CMake CLI
+
+Para quem prefere o terminal, com o CMake e a *toolchain* do MSVC disponíveis no `PATH` (use o **Developer PowerShell for VS 2022**), execute a partir da raiz do projeto:
+
+```powershell
+# 1. Configura o projeto e gera o sistema de build no diretorio build/
+cmake -S . -B build
+
+# 2. Compila no modo Release
+cmake --build build --config Release
+```
+
+O executável final fica em `build\Release\AnalisadorSemantico.exe`. Para um build de depuração, troque `Release` por `Debug` no passo 2.
 
 ### Execução
 
-O programa recebe **um único argumento**: o caminho de um arquivo de teste `.txt` contendo o programa em RPN (uma expressão por linha, entre `(START)` e `(END)`).
+O programa recebe **um único argumento**: o caminho de um arquivo de teste `.txt` que contém o programa em RPN (uma expressão por linha, entre `(START)` e `(END)`).
 
 A partir do diretório onde está o executável:
 
@@ -43,7 +58,7 @@ A partir do diretório onde está o executável:
 .\AnalisadorSemantico.exe .\teste.txt
 ```
 
-Exemplos usando os arquivos de teste fornecidos na pasta `tests/`:
+Exemplos com os arquivos de teste fornecidos na pasta `tests/`:
 
 ```powershell
 # Programa valido (gera ast_saida.json e saida.s)
@@ -101,7 +116,7 @@ O laço avalia a condição antes de cada iteração. Quando a condição result
 
 ### Comandos Especiais (Manipulação de Memória e Histórico)
 
-A linguagem suporta operações de estado utilizando as palavras reservadas `RES` e identificadores arbitrários para variáveis (`MEM`). A sintaxe segue a notação polonesa reversa:
+A linguagem suporta operações de estado por meio da palavra reservada `RES` e de identificadores arbitrários para variáveis (`MEM`). A sintaxe segue a notação polonesa reversa:
 
 #### Leitura de Histórico `RES`: `(N RES)`
 Retorna o valor computado `N` expressões atrás no histórico da FPU. O índice `N` deve ser um inteiro não negativo, onde `0` representa o último resultado avaliado. Exemplo:
@@ -215,9 +230,9 @@ O analisador implementa **recuperação de erros** (*panic mode*) com granularid
 
 1. **Análise léxica** - cada linha é tokenizada isoladamente. Se uma linha contém um erro léxico (número malformado `10..5`, operador inexistente `//`, caractere inválido `@`), o erro é registrado, os tokens parciais daquela linha são descartados e a análise segue para a próxima linha.
 2. **Validação estrutural** - verifica-se que o programa possui as linhas obrigatórias `(START)` e `(END)`.
-3. **Análise sintática** - executa **sempre**, mesmo que existam erros léxicos. Como as linhas lexicamente inválidas já tiveram seus tokens descartados, elas não chegam ao parser e **não geram erros SEMÂNTICOs falsos** (evitando o efeito *cascata*). Cada linha de expressão é analisada isoladamente: monta-se internamente um miniprograma `(START) <linha> (END)` e invoca-se o parser LL(1); se a linha falha, o erro é registrado e a análise continua na próxima linha.
-4. **Relatório de erros** - todos os erros (léxicos e SEMÂNTICOs) são acumulados, **ordenados por número de linha** e exibidos juntos, indicando o tipo (`LEXICO`/`SINTATICO`), a linha e a mensagem.
-5. **Gate de geração de código** - o código Assembly **só é gerado se não houver nenhum erro**. Havendo qualquer erro, o programa exibe o relatório e encerra com código de saída `1`, sem produzir `saida.s`.
+3. **Análise sintática** - executa **sempre**, mesmo que existam erros léxicos. Como as linhas lexicamente inválidas já tiveram seus tokens descartados, elas não chegam ao parser e **não geram erros sintáticos falsos** (o que evita o efeito *cascata*). Cada linha de expressão é analisada isoladamente: monta-se internamente um miniprograma `(START) <linha> (END)` e invoca-se o parser LL(1); se a linha falha, o erro é registrado e a análise continua na próxima linha.
+4. **Relatório de erros** - todos os erros (léxicos, sintáticos e semânticos) são acumulados, **ordenados por número de linha** e exibidos juntos, com o tipo (`LEXICO`/`SINTATICO`/`SEMANTICO`), a linha e a mensagem.
+5. **Gate de geração de código** - o código Assembly **só é gerado se não houver nenhum erro**. Se houver qualquer erro, o programa exibe o relatório e encerra com código de saída `1`, sem produzir `saida.s`.
 
 ### Mensagens de erro
 
@@ -237,7 +252,7 @@ As mensagens incluem sempre o **número da linha** e o **tipo** do erro. Exemplo
 ============================================================
 ```
 
-Os arquivos `tests/teste_erro_lexico.txt` e `tests/teste_erro_sintatico.txt` exercitam, respectivamente, a recuperação de erros léxicos e SEMÂNTICOs.
+Os arquivos `tests/teste_erro_lexico.txt` e `tests/teste_erro_sintatico.txt` exercitam, respectivamente, a recuperação de erros léxicos e sintáticos.
 
 
 ## Resultados
@@ -275,7 +290,7 @@ A tabela abaixo detalha os testes realizados para validar a recursividade da gra
 
 #### Análise de Precisão IEEE 754
 
-Tomando como exemplo o teste de **Lógica Condicional (T3)**, o valor decimal `512.0` é representado em hexadecimal de precisão dupla como `0x4080000000000000`. 
+No teste de **Lógica Condicional (T3)**, por exemplo, o valor decimal `512.0` é representado em hexadecimal de precisão dupla como `0x4080000000000000`. 
 1. Ao pressionar **KEY1**, o simulador exibe a Palavra Alta: `0x40800000`.
 2. Ao pressionar **KEY0**, o simulador exibe a Palavra Baixa: `0x00000000`.
 
@@ -283,7 +298,7 @@ A coincidência bit-a-bit entre o cálculo teórico e a saída do hardware valid
 
 ## Saídas da Última Execução
 
-O programa escreve os artefatos **no diretório de onde é executado**, usando
+O programa escreve os artefatos **no diretório de onde é executado**, com
 caminhos relativos. Portanto:
 
 - Ao executar a partir da **raiz do projeto**
@@ -308,6 +323,30 @@ gerada com **`tests/teste1.txt`**:
 > A AST é construída por `gerarArvore()` (`include/parser.hpp`) e exportada por
 > `exportarAST()` (`include/ast_exporter.hpp`); o Assembly por `gerarAssembly()`
 > (`include/armv7_generator.hpp`).
+
+## Como Ler a Tabela de Símbolos e a Árvore Atribuída
+
+### Tabela de símbolos (`TABELA_SIMBOLOS.md`)
+
+A tabela registra cada variável (memória) declarada no programa, uma por linha, com quatro colunas:
+
+- **Variável** - o nome da memória (ex.: `CONTADOR`).
+- **Tipo** - o tipo fixado na primeira definição `(V MEM)`: `INT`, `REAL`, `BOOL` ou `DESCONHECIDO`.
+- **Linha Definição** - a linha do código-fonte onde a variável recebeu sua primeira definição.
+- **Linhas de Uso** - as linhas onde a variável foi lida `(MEM)` ou reatribuída.
+
+A função `construirTabelaSimbolos` cria a tabela e `verificarTipos` preenche os tipos. Ela é a base para detectar uso antes da definição e reatribuição com tipo incompatível.
+
+### Árvore atribuída (`ARVORE_ATRIBUIDA.md` e `ast_saida.json`)
+
+A árvore sintática atribuída é a AST anotada com a informação semântica de cada nó. Cada nó mostra:
+
+- a **categoria semântica** (ex.: `Operador aritmetico`, `Decisao (IFELSE)`, `Uso de variavel (LOAD)`);
+- o **operando/valor** associado, quando há (ex.: o operador `+` ou o nome da variável);
+- o **tipo inferido** (`_INT_`, `_REAL_`, `_BOOL_` ou `_DESCONHECIDO_`), resultado de `verificarTipos`;
+- a **linha** do código-fonte de origem.
+
+A indentação reflete o aninhamento das expressões RPN. O `ARVORE_ATRIBUIDA.md` traz a versão legível em Markdown; o `ast_saida.json` traz a mesma árvore serializada, com o campo `tipoDado` em cada nó. É essa árvore que justifica a geração do Assembly.
 
 ## Documentação (Artefatos de Entrega)
 
