@@ -63,13 +63,13 @@ Exemplos usando os arquivos de teste fornecidos na pasta `tests/`:
 | `ast_saida.json` | Árvore Sintática Abstrata (AST) serializada em JSON. |
 | `saida.s` | Código Assembly ARMv7 gerado a partir da AST. |
 
-Se o programa **contém erros**, é exibido um **relatório de erros** (com tipo `LEXICO`/`SINTATICO`/`SEMANTICO` e número da linha) e nenhum código Assembly é gerado — o processo encerra com código de saída `1`.
+Se o programa **contém erros**, é exibido um **relatório de erros** (com tipo `LEXICO`/`SINTATICO`/`SEMANTICO` e número da linha) e nenhum código Assembly é gerado - o processo encerra com código de saída `1`.
 
 ### Sintaxe das Estruturas de Controle
 
 A linguagem mantém a notação polonesa reversa (RPN) para todas as estruturas. Os operandos sempre precedem a keyword que os opera.
 
-#### Tomada de Decisão — `IFELSE`
+#### Tomada de Decisão - `IFELSE`
 
 Requer **3 operandos** antes da keyword: condição, bloco verdadeiro e bloco falso.
 
@@ -77,14 +77,14 @@ Requer **3 operandos** antes da keyword: condição, bloco verdadeiro e bloco fa
 ( (condição) (bloco_verdadeiro) (bloco_falso) IFELSE )
 ```
 
-**Exemplo** — se `A > B`, retorna `A + B`, senão retorna `A - B`:
+**Exemplo** - se `A > B`, retorna `A + B`, senão retorna `A - B`:
 ```
 ( (A B >) (A B +) (A B -) IFELSE )
 ```
 
 A condição deve ser uma expressão que resulte em valor comparável via operador relacional (`<`, `>`, `==`, `!=`, `<=`, `>=`). Ambos os blocos são obrigatórios.
 
-#### Laço de Repetição — `WHILE`
+#### Laço de Repetição - `WHILE`
 
 Requer **2 operandos** antes da keyword: condição e bloco de repetição.
 
@@ -92,7 +92,7 @@ Requer **2 operandos** antes da keyword: condição e bloco de repetição.
 ( (condição) (bloco_repeticao) WHILE )
 ```
 
-**Exemplo** — enquanto `CONTADOR < 10`, soma `1` ao contador e armazena:
+**Exemplo** - enquanto `CONTADOR < 10`, soma `1` ao contador e armazena:
 ```
 ( ((CONTADOR) 10 <) (((CONTADOR) 1 +) CONTADOR) WHILE )
 ```
@@ -203,21 +203,21 @@ operacao              = OPERADOR | OPERADOR_RELACIONAL | WHILE | operando , "IFE
 
 Os conjuntos **FIRST/FOLLOW**, a **tabela de parsing LL(1)** completa e os
 **atributos semânticos** (nó da AST e tipo inferido de cada produção) estão
-documentados em **[`GRAMATICA.md`](GRAMATICA.md)** — calculados dinamicamente por
+documentados em **[`GRAMATICA.md`](GRAMATICA.md)** - calculados dinamicamente por
 `src/gramatica.cpp` e impressos no início de cada execução. A ausência de colisões
 em qualquer célula `M[A, t]` comprova que a gramática é **LL(1)**.
  
 ## Tratamento e Recuperação de Erros
 
-O analisador implementa **recuperação de erros** (*panic mode*) com granularidade de **linha**: ao encontrar um erro, ele **não interrompe** a análise no primeiro problema — registra o erro e prossegue, de modo a reportar **todos** os erros do programa em uma única execução.
+O analisador implementa **recuperação de erros** (*panic mode*) com granularidade de **linha**: ao encontrar um erro, ele **não interrompe** a análise no primeiro problema - registra o erro e prossegue, de modo a reportar **todos** os erros do programa em uma única execução.
 
 ### Fluxo de análise
 
-1. **Análise léxica** — cada linha é tokenizada isoladamente. Se uma linha contém um erro léxico (ex.: número malformado `10..5`, operador inexistente `//`, caractere inválido `@`), o erro é registrado, os tokens parciais daquela linha são descartados e a análise segue para a próxima linha.
-2. **Validação estrutural** — verifica-se que o programa possui as linhas obrigatórias `(START)` e `(END)`.
-3. **Análise sintática** — executa **sempre**, mesmo que existam erros léxicos. Como as linhas lexicamente inválidas já tiveram seus tokens descartados, elas não chegam ao parser e **não geram erros SEMÂNTICOs falsos** (evitando o efeito *cascata*). Cada linha de expressão é analisada isoladamente: monta-se internamente um miniprograma `(START) <linha> (END)` e invoca-se o parser LL(1); se a linha falha, o erro é registrado e a análise continua na próxima linha.
-4. **Relatório de erros** — todos os erros (léxicos e SEMÂNTICOs) são acumulados, **ordenados por número de linha** e exibidos juntos, indicando o tipo (`LEXICO`/`SINTATICO`), a linha e a mensagem.
-5. **Gate de geração de código** — o código Assembly **só é gerado se não houver nenhum erro**. Havendo qualquer erro, o programa exibe o relatório e encerra com código de saída `1`, sem produzir `saida.s`.
+1. **Análise léxica** - cada linha é tokenizada isoladamente. Se uma linha contém um erro léxico (número malformado `10..5`, operador inexistente `//`, caractere inválido `@`), o erro é registrado, os tokens parciais daquela linha são descartados e a análise segue para a próxima linha.
+2. **Validação estrutural** - verifica-se que o programa possui as linhas obrigatórias `(START)` e `(END)`.
+3. **Análise sintática** - executa **sempre**, mesmo que existam erros léxicos. Como as linhas lexicamente inválidas já tiveram seus tokens descartados, elas não chegam ao parser e **não geram erros SEMÂNTICOs falsos** (evitando o efeito *cascata*). Cada linha de expressão é analisada isoladamente: monta-se internamente um miniprograma `(START) <linha> (END)` e invoca-se o parser LL(1); se a linha falha, o erro é registrado e a análise continua na próxima linha.
+4. **Relatório de erros** - todos os erros (léxicos e SEMÂNTICOs) são acumulados, **ordenados por número de linha** e exibidos juntos, indicando o tipo (`LEXICO`/`SINTATICO`), a linha e a mensagem.
+5. **Gate de geração de código** - o código Assembly **só é gerado se não houver nenhum erro**. Havendo qualquer erro, o programa exibe o relatório e encerra com código de saída `1`, sem produzir `saida.s`.
 
 ### Mensagens de erro
 
@@ -283,18 +283,26 @@ A coincidência bit-a-bit entre o cálculo teórico e a saída do hardware valid
 
 ## Saídas da Última Execução
 
-A cada execução o programa **sobrescreve** os artefatos no diretório de onde foi
-executado (ex.: `build/Release/`, ignorado pelo `.gitignore`). Para registro, uma
-cópia dos artefatos da última execução válida — gerada com **`tests/teste2.txt`** —
-está versionada no diretório [`output/`](output/):
+O programa escreve os artefatos **no diretório de onde é executado**, usando
+caminhos relativos. Portanto:
+
+- Ao executar a partir da **raiz do projeto**
+  (`.\build\Release\AnalisadorSemantico.exe .\tests\teste1.txt`), os artefatos
+  são gerados **na raiz** - foi assim que as cópias versionadas abaixo foram produzidas.
+- Ao executar de dentro de `build/Release/`, os artefatos são gerados ali (diretório
+  ignorado pelo `.gitignore`).
+
+Os artefatos versionados no repositório correspondem à **última execução válida**,
+gerada com **`tests/teste1.txt`**:
 
 | Arquivo | Descrição |
 | :--- | :--- |
-| [`output/tokens.txt`](output/tokens.txt) | Vetor de tokens (saída do analisador léxico). |
-| [`output/ast_saida.json`](output/ast_saida.json) | Árvore sintática **atribuída** (com `tipoDado` em cada nó), serializada em JSON. |
-| [`output/ARVORE_ATRIBUIDA.md`](output/ARVORE_ATRIBUIDA.md) | Árvore atribuída em Markdown (categoria semântica + tipo de cada nó). |
-| [`output/TABELA_SIMBOLOS.md`](output/TABELA_SIMBOLOS.md) | Tabela de símbolos com tipos inferidos, linha de definição e usos. |
-| [`output/saida.s`](output/saida.s) | Código Assembly ARMv7 para o simulador CPUlator-ARMv7 DEC1-SOC (v16.1). |
+| [`tokens.txt`](tokens.txt) | Vetor de tokens (saída do analisador léxico). |
+| [`ast_saida.json`](ast_saida.json) | Árvore sintática **atribuída** (com `tipoDado` em cada nó), serializada em JSON. |
+| [`ARVORE_ATRIBUIDA.md`](ARVORE_ATRIBUIDA.md) | Árvore atribuída em Markdown (categoria semântica + tipo de cada nó). |
+| [`TABELA_SIMBOLOS.md`](TABELA_SIMBOLOS.md) | Tabela de símbolos com tipos inferidos, linha de definição e usos. |
+| [`saida.s`](saida.s) | Código Assembly ARMv7 para o simulador CPUlator-ARMv7 DEC1-SOC (v16.1). |
+| [`ERROS_SEMANTICOS.md`](ERROS_SEMANTICOS.md) | Relatório de erros da última execução (vazio quando o programa é válido). |
 
 > O Assembly é gerado **somente** quando não há erros léxicos/sintáticos/semânticos.
 > A AST é construída por `gerarArvore()` (`include/parser.hpp`) e exportada por

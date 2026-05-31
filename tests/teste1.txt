@@ -11,7 +11,7 @@
 (9.0 2.0 |)
 (50 CONTADOR)
 ((CONTADOR) (1 RES) +)
-(((CONTADOR) 50 >=) (100) (200) IFELSE)
+(((*{qualquerlugar}*CONTADOR) 50 >=) (100) (200) IFELSE)
 (((CONTADOR) 60 <) (((CONTADOR) 1 +) CONTADOR) WHILE)
 (TRUE FALSE !=)
 ((((8 2 *) (3 1 +) -) 2 ^) FINAL)
