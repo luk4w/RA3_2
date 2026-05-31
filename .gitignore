@@ -2,3 +2,5 @@ build
 .codegraph/
 *.md
 !README.md
+!output/
+!output/*.md
