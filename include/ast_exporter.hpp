@@ -9,6 +9,16 @@
 #include <string>
 #include <vector>
 
+// Converte o enum TipoDado para string para legibilidade no JSON
+inline std::string tipoDadoToStringJson(TipoDado t) {
+    switch (t) {
+        case TipoDado::INT: return "INT";
+        case TipoDado::REAL: return "REAL";
+        case TipoDado::BOOL: return "BOOL";
+        default: return "DESCONHECIDO";
+    }
+}
+
 // Converte o enum ASTNodeType para string para legibilidade no JSON
 inline std::string nodeTypeToString(ASTNodeType tipo) {
     switch (tipo) {
@@ -33,7 +43,8 @@ inline std::string buildJson(ASTNode* node, int indent = 0) {
     std::string space(indent, ' ');
     std::string json = "{\n";
     json += space + "  \"tipo\": \"" + nodeTypeToString(node->tipo) + "\",\n";
-    
+    json += space + "  \"tipoDado\": \"" + tipoDadoToStringJson(node->tipoDado) + "\",\n";
+
     if (!node->operando.empty())
         json += space + "  \"operando\": \"" + node->operando + "\",\n";
     

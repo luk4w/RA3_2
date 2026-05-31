@@ -288,9 +288,13 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // Exportar a AST
+    // Exportar a AST 
+    // ja atribuida com os tipos inferidos por verificarTipos
     if (arvore)
+    {
         exportarAST(arvore, "ast_saida.json");
+        exportarArvoreAtribuida(arvore, "ARVORE_ATRIBUIDA.md");
+    }
 
     // Geracao de codigo Assembly ARMv7 para Cpulator-ARMv7 DEC1-SOC(v16.1)
     // a partir da AST

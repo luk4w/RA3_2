@@ -449,3 +449,71 @@ TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroA
         return TipoDado::DESCONHECIDO;
     }
 }
+
+// Exportar arvore sintatica atribuida
+namespace
+{
+    // Categoria semantica legivel de cada tipo de no.
+    std::string categoriaSemantica(ASTNodeType t)
+    {
+        switch (t)
+        {
+        case ASTNodeType::PROGRAMA: return "Programa";
+        case ASTNodeType::SEQUENCIA: return "Sequencia";
+        case ASTNodeType::INSTRUCAO_VFP: return "Operador aritmetico";
+        case ASTNodeType::INSTRUCAO_CMP: return "Operador relacional";
+        case ASTNodeType::MEMORIA_LOAD: return "Uso de variavel (LOAD)";
+        case ASTNodeType::MEMORIA_STORE: return "Definicao de variavel (STORE)";
+        case ASTNodeType::MEMORIA_RES: return "Resultado anterior (RES)";
+        case ASTNodeType::NUMERO_LITERAL: return "Literal numerico";
+        case ASTNodeType::BOOL_LITERAL: return "Literal logico";
+        case ASTNodeType::COMANDO_IFELSE: return "Decisao (IFELSE)";
+        case ASTNodeType::COMANDO_WHILE: return "Repeticao (WHILE)";
+        default: return "Desconhecido";
+        }
+    }
+
+    // Imprime um no e seus filhos como uma arvore indentada em Markdown
+    void escreverNoAtribuido(std::ostream &out, ASTNode *no, int nivel)
+    {
+        if (!no)
+            return;
+
+        std::string indent(nivel * 2, ' ');
+        out << indent << "- **" << categoriaSemantica(no->tipo) << "**";
+
+        if (!no->operando.empty())
+            out << " `" << no->operando << "`";
+
+        out << " : _" << nomeTipoDado(no->tipoDado) << "_";
+
+        if (no->linha > 0)
+            out << " (linha " << no->linha << ")";
+
+        out << "\n";
+
+        for (ASTNode *filho : no->filhos)
+            escreverNoAtribuido(out, filho, nivel + 1);
+    }
+}
+
+void exportarArvoreAtribuida(ASTNode *raiz, const std::string &arquivo)
+{
+    std::ofstream out(arquivo);
+    if (!out.is_open())
+        return;
+
+    out << "# Arvore Sintatica Atribuida\n\n";
+    out << "Arvore anotada com a categoria semantica, o operando/valor e o tipo "
+           "inferido de cada no (resultado de `verificarTipos`).\n\n";
+
+    if (!raiz)
+    {
+        out << "_(arvore vazia)_\n";
+        out.close();
+        return;
+    }
+
+    escreverNoAtribuido(out, raiz, 0);
+    out.close();
+}

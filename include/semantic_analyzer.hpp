@@ -85,3 +85,13 @@ std::string nomeTipoDado(TipoDado t);
  * @return Tipo inferido da subarvore
  */
 TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros);
+
+/**
+ * @brief Exporta a arvore sintatica atribuida e anotada com tipos em Markdown
+ * Deve ser chamada apos `verificarTipos`, que anota `tipoDado` em cada no
+ * Gera uma arvore indentada onde cada no exibe 
+ * sua categoria semantica o operando/valor e o tipo inferido
+ * @param raiz Ponteiro para a raiz da AST ja atribuida
+ * @param arquivo Caminho do arquivo Markdown de saida
+ */
+void exportarArvoreAtribuida(ASTNode *raiz, const std::string &arquivo);
