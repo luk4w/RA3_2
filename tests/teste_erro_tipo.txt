@@ -1,0 +1,9 @@
+(START)
+*{ erros de tipo propositais para validar verificarTipos }*
+(10 2.5 +)
+(10 3.0 /)
+(5 1 0 IFELSE)
+(10 X)
+(2.0 X)
+((TRUE 5 +) 1 2 IFELSE)
+(END)

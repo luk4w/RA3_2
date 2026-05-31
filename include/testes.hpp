@@ -414,9 +414,179 @@ inline void executarTestesEtapa3()
     std::cout << "[SUCESSO] Tabela de Simbolos validada!\n";
 }
 
+// TESTES DE VERIFICACAO DE TIPOS
+
+// Helpers para montar nos rapidamente nos testes de tipo.
+inline ASTNode *noNum(const std::string &valor, int linha = 1)
+{
+    return new ASTNode(ASTNodeType::NUMERO_LITERAL, linha, "NUMERO", valor);
+}
+
+inline ASTNode *noOp(const std::string &op, ASTNode *a, ASTNode *b, int linha = 1)
+{
+    ASTNode *n = new ASTNode(ASTNodeType::INSTRUCAO_VFP, linha, op, op);
+    n->filhos.push_back(a);
+    n->filhos.push_back(b);
+    return n;
+}
+
+inline void testeTipoSomaInteira()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *soma = noOp("+", noNum("3"), noNum("2")); // (3 2 +)
+    TipoDado t = verificarTipos(soma, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::INT);
+    delete soma;
+    std::cout << "  -> [OK] Tipos: Soma int x int -> int\n";
+}
+
+inline void testeTipoSomaRealValida()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *soma = noOp("+", noNum("3.0"), noNum("2.5")); // (3.0 2.5 +)
+    TipoDado t = verificarTipos(soma, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::REAL);
+    delete soma;
+    std::cout << "  -> [OK] Tipos: Soma real x real -> real\n";
+}
+
+inline void testeTipoMisturaIntRealErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *soma = noOp("+", noNum("3"), noNum("2.5")); // (3 2.5 +) -> erro
+    verificarTipos(soma, tabela, erros);
+    assert(!erros.empty());
+    assert(erros[0].tipo == "SEMANTICO");
+    assert(erros[0].mensagem.find("misturar tipos") != std::string::npos);
+    delete soma;
+    std::cout << "  -> [OK] Tipos: Mistura int x real dispara erro\n";
+}
+
+inline void testeTipoDivisaoInteiraComRealErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *div = noOp("/", noNum("10"), noNum("3.0")); // (10 3.0 /) -> erro
+    verificarTipos(div, tabela, erros);
+    assert(!erros.empty());
+    assert(erros[0].mensagem.find("inteiros") != std::string::npos);
+    delete div;
+    std::cout << "  -> [OK] Tipos: Divisao inteira com real dispara erro\n";
+}
+
+inline void testeTipoDivisaoRealResultadoReal()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *div = noOp("|", noNum("10"), noNum("3")); // (10 3 |) -> real
+    TipoDado t = verificarTipos(div, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::REAL);
+    delete div;
+    std::cout << "  -> [OK] Tipos: Divisao real (|) int x int -> real\n";
+}
+
+inline void testeTipoRelacionalBool()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *cmp = new ASTNode(ASTNodeType::INSTRUCAO_CMP, 1, "<=", "<="); // (5 2 <=)
+    cmp->filhos.push_back(noNum("5"));
+    cmp->filhos.push_back(noNum("2"));
+    TipoDado t = verificarTipos(cmp, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::BOOL);
+    delete cmp;
+    std::cout << "  -> [OK] Tipos: Relacional int x int -> bool\n";
+}
+
+inline void testeTipoIfelseCondNaoBoolErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (5 1 0 IFELSE) -> condicao 5 (int) nao e bool
+    ASTNode *ife = new ASTNode(ASTNodeType::COMANDO_IFELSE, 1, "IFELSE", "IFELSE");
+    ife->filhos.push_back(noNum("5"));
+    ife->filhos.push_back(noNum("1"));
+    ife->filhos.push_back(noNum("0"));
+    verificarTipos(ife, tabela, erros);
+    assert(!erros.empty());
+    assert(erros[0].mensagem.find("condicao do IFELSE") != std::string::npos);
+    delete ife;
+    std::cout << "  -> [OK] Tipos: Condicao de IFELSE nao-bool dispara erro\n";
+}
+
+inline void testeTipoReatribuicaoIncompativelErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (10 X) define X int; (2.0 X) tenta redefinir como real -> erro de tipagem forte
+    ASTNode *raiz = new ASTNode(ASTNodeType::PROGRAMA, 0, "programa");
+
+    ASTNode *st1 = new ASTNode(ASTNodeType::MEMORIA_STORE, 1, "VSTR.F64", "X");
+    st1->filhos.push_back(noNum("10", 1));
+    ASTNode *st2 = new ASTNode(ASTNodeType::MEMORIA_STORE, 2, "VSTR.F64", "X");
+    st2->filhos.push_back(noNum("2.0", 2));
+
+    raiz->filhos.push_back(st1);
+    raiz->filhos.push_back(st2);
+
+    verificarTipos(raiz, tabela, erros);
+    assert(!erros.empty());
+    assert(erros[0].mensagem.find("tipagem estatica e forte") != std::string::npos);
+    assert(tabela["X"].tipo == TipoDado::INT); // mantem o tipo da primeira definicao
+    delete raiz;
+    std::cout << "  -> [OK] Tipos: Reatribuicao com tipo incompativel dispara erro\n";
+}
+
+inline void testeTipoInferenciaVariavel()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (3.0 Y) infere Y como real; (Y 2.0 +) usa Y -> real, sem erro
+    ASTNode *raiz = new ASTNode(ASTNodeType::PROGRAMA, 0, "programa");
+
+    ASTNode *st = new ASTNode(ASTNodeType::MEMORIA_STORE, 1, "VSTR.F64", "Y");
+    st->filhos.push_back(noNum("3.0", 1));
+
+    ASTNode *load = new ASTNode(ASTNodeType::MEMORIA_LOAD, 2, "VLDR.F64", "Y");
+    ASTNode *soma = noOp("+", load, noNum("2.0", 2), 2);
+
+    raiz->filhos.push_back(st);
+    raiz->filhos.push_back(soma);
+
+    verificarTipos(raiz, tabela, erros);
+    assert(erros.empty());
+    assert(tabela["Y"].tipo == TipoDado::REAL);
+    assert(soma->tipoDado == TipoDado::REAL);
+    delete raiz;
+    std::cout << "  -> [OK] Tipos: Inferencia de tipo de variavel pelo contexto\n";
+}
+
+inline void executarTestesEtapa4()
+{
+    std::cout << "\nRODANDO TESTES UNITARIOS: VERIFICACAO DE TIPOS\n";
+    testeTipoSomaInteira();
+    testeTipoSomaRealValida();
+    testeTipoMisturaIntRealErro();
+    testeTipoDivisaoInteiraComRealErro();
+    testeTipoDivisaoRealResultadoReal();
+    testeTipoRelacionalBool();
+    testeTipoIfelseCondNaoBoolErro();
+    testeTipoReatribuicaoIncompativelErro();
+    testeTipoInferenciaVariavel();
+    std::cout << "[SUCESSO] Verificacao de Tipos validada!\n";
+}
+
 inline void executarTodosTestes()
 {
     executarTestesEtapa1();
     executarTestesEtapa2();
     executarTestesEtapa3();
+    executarTestesEtapa4();
 }

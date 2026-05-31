@@ -13,5 +13,5 @@
 (0 CONTADOR)
 (((CONTADOR) 5 <=) (((CONTADOR) 1 +) CONTADOR) WHILE)
 (CONTADOR)
-((10 10 *) 2.0 /)
+((10.0 10.0 *) 2.0 |)
 (END)
