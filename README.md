@@ -70,12 +70,12 @@ Exemplos com os arquivos de teste fornecidos na pasta `tests/`:
 
 > Nota: ajustar o caminho relativo (`..\..\tests\`).
 
-**Saídas geradas** (no diretório de execução), quando o programa não contém erros:
+**Saídas geradas** no diretório de execução (o `tokens.txt` sai sempre; o `ast_saida.json` e o `saida.s` apenas quando o programa não contém erros):
 
 | Arquivo | Descrição |
 | :--- | :--- |
 | `tokens.txt` | Vetor de tokens da última execução (saída do analisador léxico). |
-| `ast_saida.json` | Árvore Sintática Abstrata (AST) serializada em JSON. |
+| `ast_saida.json` | Árvore sintática **atribuída** (AST com `tipoDado` em cada nó) serializada em JSON. |
 | `saida.s` | Código Assembly ARMv7 gerado a partir da AST. |
 
 Se o programa **contém erros**, é exibido um **relatório de erros** (com tipo `LEXICO`/`SINTATICO`/`SEMANTICO` e número da linha) e nenhum código Assembly é gerado - o processo encerra com código de saída `1`.
@@ -97,7 +97,7 @@ Requer **3 operandos** antes da keyword: condição, bloco verdadeiro e bloco fa
 ( (A B >) (A B +) (A B -) IFELSE )
 ```
 
-A condição deve ser uma expressão que resulte em valor comparável via operador relacional (`<`, `>`, `==`, `!=`, `<=`, `>=`). Ambos os blocos são obrigatórios.
+A condição deve ter tipo lógico (`bool`) - tipicamente o resultado de um operador relacional (`<`, `>`, `<=`, `>=`, `==`, `!=`) ou um literal `TRUE`/`FALSE`. Ambos os blocos são obrigatórios.
 
 #### Laço de Repetição - `WHILE`
 
@@ -135,7 +135,7 @@ Armazena o valor `V` (que pode ser um literal numérico ou o resultado de uma ex
 ```
 
 #### Leitura de Memória `LOAD`: `(MEM)`
-Carrega na pilha da FPU o valor atual armazenado na variável identificada. Se a variável não houver sido inicializada, o valor padrão retornado é `0.0`. Exemplo:
+Carrega na pilha da FPU o valor armazenado na variável identificada. A variável precisa ter sido definida antes com `(V MEM)` - como `(V MEM)` define e inicializa em um único passo, ler uma memória nunca definida é **erro semântico** (uso antes da definição), reportado com a linha e o nome da variável. Exemplo:
 ```
 ((CONTADOR) 1 +)
 ```
@@ -160,7 +160,8 @@ definição (não pode mudar depois). **Não há coerção implícita** entre `i
 | `\|` (divisão real) | mesmo tipo numérico | `real` |
 | `^` (potência) | mesmo tipo numérico | mesmo tipo |
 | `/` `%` (divisão inteira, resto) | **apenas `int`** | `int` |
-| `== != < > <= >=` | mesmo tipo | `bool` |
+| `< > <= >=` | mesmo tipo **numérico** | `bool` |
+| `== !=` | mesmo tipo (`int`/`real`/`bool`) | `bool` |
 | `IFELSE` | condição `bool`; ramos do mesmo tipo | tipo dos ramos |
 | `WHILE` | condição `bool` | tipo do corpo |
 
