@@ -199,17 +199,19 @@ void construirGramatica()
 
     gramatica["expressao_aninhada"] = {{"PARENTESE_ESQ", "corpo_expressao", "PARENTESE_DIR"}};
 
-    gramatica["operando"] = {{"NUMERO"}, {"TRUE"}, {"FALSE"}, {"expressao_aninhada"}};
+    gramatica["operando"] = {{"NUMERO"}, {"TRUE"}, {"FALSE"}, {"IDENTIFICADOR"}, {"RES"}, {"expressao_aninhada"}};
 
     gramatica["corpo_expressao"] = {
-        {"IDENTIFICADOR"},
         {"operando", "complemento_expressao"}};
 
     gramatica["complemento_expressao"] = {
-        {"IDENTIFICADOR"},
-        {"RES"},
-        {"operando", "operacao"},
+        {"operando", "resto_complemento"},
         {"EPSILON"}};
+
+    gramatica["resto_complemento"] = {
+        {"operacao"},
+        {"EPSILON"}};
+
     gramatica["operacao"] = {{"OPERADOR"}, {"OPERADOR_RELACIONAL"}, {"WHILE"}, {"operando", "IFELSE"}};
 
     auto first = calcularFirst();
