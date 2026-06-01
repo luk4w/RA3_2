@@ -87,6 +87,24 @@ std::string nomeTipoDado(TipoDado t);
 TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros);
 
 /**
+ * @brief Produz a arvore sintatica atribuida (aumentada) a partir da arvore inicial,
+ * da tabela de simbolos e dos tipos inferidos
+ *
+ * Ela percorre a AST invocando `verificarTipos`, que anota o campo `tipoDado` em cada no relevante
+ * e infere o tipo das variaveis na `tabela`
+ * 
+ * A arvore e anotada in-place: o proprio ponteiro `raiz` recebido passa a ser a arvore atribuida
+ * usada por `gerarAssembly` e por `exportarArvoreAtribuida`
+ * 
+ * Os erros de tipo sao acumulados em `erros`
+ *
+ * @param raiz Ponteiro para a raiz da AST inicial (anotada in-place)
+ * @param tabela Tabela de simbolos cujos tipos serao inferidos/validados
+ * @param erros Vetor para acumular erros semanticos de tipo
+ */
+void gerarArvoreAtribuida(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros);
+
+/**
  * @brief Exporta a arvore sintatica atribuida e anotada com tipos em Markdown
  * Deve ser chamada apos `verificarTipos`, que anota `tipoDado` em cada no
  * Gera uma arvore indentada onde cada no exibe 

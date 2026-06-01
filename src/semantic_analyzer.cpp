@@ -348,7 +348,7 @@ static TipoDado verificarTiposImpl(ASTNode *raiz, TabelaSimbolos &tabela,
                                    std::vector<ErroAnalise> &erros,
                                    std::vector<TipoDado> &historico);
 
-// Entrada publica (mesma assinatura de antes) so cria o historico e chama a recursiva
+// Entrada publica so cria o historico e chama a recursiva
 TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros)
 {
     std::vector<TipoDado> historico;
@@ -535,6 +535,15 @@ static TipoDado verificarTiposImpl(ASTNode *raiz, TabelaSimbolos &tabela,
         raiz->tipoDado = TipoDado::DESCONHECIDO;
         return TipoDado::DESCONHECIDO;
     }
+}
+
+// Produz a arvore sintatica atribuida (aumentada) a partir da arvore inicial,
+// da tabela de simbolos e dos tipos inferidos (Secao 7.4 da especificacao).
+// A atribuicao e feita por verificarTipos, que anota `tipoDado` em cada no e
+// infere o tipo das variaveis na tabela. A arvore e anotada in-place.
+void gerarArvoreAtribuida(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros)
+{
+    verificarTipos(raiz, tabela, erros);
 }
 
 // Exportar arvore sintatica atribuida

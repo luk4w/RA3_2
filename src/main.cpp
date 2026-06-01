@@ -231,9 +231,9 @@ int main(int argc, char *argv[])
     TabelaSimbolos tabelaSimbolos;
     construirTabelaSimbolos(arvore, tabelaSimbolos, erros);
 
-    // Verificacao e inferencia de tipos
-    // anotar tipoDado nos nós e na tabela
-    verificarTipos(arvore, tabelaSimbolos, erros);
+    // Geracao da arvore sintatica atribuida (aumentada)
+    // verifica/infere os tipos e anota tipoDado em cada no e na tabela
+    gerarArvoreAtribuida(arvore, tabelaSimbolos, erros);
 
     // Exporta a tabela ja com os tipos inferidos pela verificacao
     exportarTabelaSimbolos(tabelaSimbolos, "TABELA_SIMBOLOS.md");
