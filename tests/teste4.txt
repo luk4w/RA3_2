@@ -1,24 +1,24 @@
 (START)
 *{ teste4: programa valido - integracao complexa com variaveis int, real e bool }*
-(100 LIMITE_INT)
-(0.5 FATOR_REAL)
+(100 LIMITEINT)
+(0.5 FATORREAL)
 (FALSE FLAGBOOL)
 
 *{ Atualiza a variavel bool baseada em uma expressao relacional }*
-(((LIMITE_INT) 50 >=) FLAGBOOL)
+(((LIMITEINT) 50 >=) FLAGBOOL)
 
 *{ Usa a variavel bool na condicao do WHILE }*
-(((FLAGBOOL) TRUE ==) (((LIMITE_INT) 10 -) LIMITE_INT) WHILE)
+(((FLAGBOOL) TRUE ==) (((LIMITEINT) 10 -) LIMITEINT) WHILE)
 
 *{ Usando divisao real, divisao inteira e resto corretamente }*
-((LIMITE_INT) 3 /)
-((LIMITE_INT) 3 %)
+((LIMITEINT) 3 /)
+((LIMITEINT) 3 %)
 (15.0 2.0 |)
 
 *{ O historico (RES) resolve seu tipo perfeitamente. (0 RES) eh o 15.0/2.0 = 7.5 (REAL) }*
-(((FATOR_REAL) (0 RES) *) FATOR_REAL)
+(((FATORREAL) (0 RES) *) FATORREAL)
 
 *{ Testando condicional que retorna real }*
-(((FATOR_REAL) 1.0 >) (99.9) (0.0) IFELSE)
+(((FATORREAL) 1.0 >) (99.9) (0.0) IFELSE)
 
 (END)
