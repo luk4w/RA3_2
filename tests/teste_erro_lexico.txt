@@ -1,4 +1,10 @@
 (START)
+
+
+
+
+
+
 *{ teste_erro_lexico: programas que falham na tokenizacao }*
 (10 I)
 (5.0 R)

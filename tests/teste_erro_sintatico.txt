@@ -11,6 +11,17 @@
 ( ((I) 5 !=) (((I) 1 +) I) WHILE 
 
 *{ Sintatico falha: keyword mal posicionada }*
+
+
+
+
+
+
+
+
+
+
+
 ( IFELSE ((R) 10.0 >=) (2123.0) (0.0) )
 
 *{ Sintatico falha: operador isolado sem operando }*
