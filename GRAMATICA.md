@@ -4,12 +4,10 @@ Lucas Franco de Mello - luk4w
 Nome do grupo no Canvas: RA3 2
 -->
 
-# Gramática Atribuída (EBNF) — Analisador Semântico
+# Gramática Atribuída (EBNF) - Analisador Semântico
 
 Gramática **LL(1)** da linguagem RPN, fatorada à esquerda e livre de conflitos.
-Os conjuntos FIRST/FOLLOW e a tabela de parsing abaixo são **calculados
-dinamicamente** pelo programa (`src/gramatica.cpp`) e reproduzidos aqui a partir
-da saída real da execução.
+Os conjuntos FIRST/FOLLOW e a tabela de parsing abaixo são **calculados dinamicamente** pelo programa (`src/gramatica.cpp`) e reproduzidos aqui a partir da saída real da execução.
 
 ## 1. Símbolos terminais (tokens)
 
@@ -61,9 +59,7 @@ operacao              = OPERADOR
 
 ## 4. Atributos semânticos (gramática atribuída)
 
-Cada construção sintática produz um nó na AST (`ASTNode`) e recebe um atributo de
-tipo (`tipoDado`) durante `verificarTipos`. As regras de tipo completas estão em
-[`REGRAS_TIPOS.md`](REGRAS_TIPOS.md).
+Cada construção sintática produz um nó na AST (`ASTNode`) e recebe um atributo de tipo (`tipoDado`) durante `verificarTipos`. As regras de tipo completas estão em [`REGRAS_TIPOS.md`](REGRAS_TIPOS.md).
 
 | Forma RPN | Token / produção | Nó da AST | Atributo de tipo (`tipoDado`) |
 |-----------|------------------|-----------|-------------------------------|
@@ -77,8 +73,7 @@ tipo (`tipoDado`) durante `verificarTipos`. As regras de tipo completas estão e
 | `(C T E IFELSE)` | `operando IFELSE` | `COMANDO_IFELSE` | tipo comum dos ramos `T`/`E`; `C` deve ser `BOOL` |
 | `(C B WHILE)` | `WHILE` | `COMANDO_WHILE` | tipo do corpo `B`; `C` deve ser `BOOL` |
 
-A ação de redução (`reduzirFrame` em `src/parser.cpp`) decide entre `MEMORIA_LOAD`
-e `MEMORIA_STORE` conforme o `IDENTIFICADOR` apareça sozinho ou após um valor.
+A ação de redução (`reduzirFrame` em `src/parser.cpp`) decide entre `MEMORIA_LOAD` e `MEMORIA_STORE` conforme o `IDENTIFICADOR` apareça sozinho ou após um valor.
 
 ## 5. Conjuntos FIRST
 
@@ -136,5 +131,4 @@ M[operacao, WHILE]                   = WHILE
 M[operacao, ( NUMERO TRUE FALSE IDENTIFICADOR RES] = operando IFELSE
 ```
 
-A ausência de colisões em qualquer célula `M[A, t]` prova que a gramática é
-**LL(1)** — o parser preditivo descendente decide a produção sem retrocesso.
+A ausência de colisões em qualquer célula `M[A, t]` prova que a gramática é **LL(1)**.
