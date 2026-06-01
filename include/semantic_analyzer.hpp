@@ -94,7 +94,7 @@ TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroA
  * e infere o tipo das variaveis na `tabela`
  * 
  * A arvore e anotada in-place: o proprio ponteiro `raiz` recebido passa a ser a arvore atribuida
- * usada por `gerarAssembly` e por `exportarArvoreAtribuida`
+ * usada por `gerarAssembly` e exportada por `exportarAST` (ast_atribuida.json)
  * 
  * Os erros de tipo sao acumulados em `erros`
  *
@@ -103,16 +103,6 @@ TipoDado verificarTipos(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroA
  * @param erros Vetor para acumular erros semanticos de tipo
  */
 void gerarArvoreAtribuida(ASTNode *raiz, TabelaSimbolos &tabela, std::vector<ErroAnalise> &erros);
-
-/**
- * @brief Exporta a arvore sintatica atribuida e anotada com tipos em Markdown
- * Deve ser chamada apos `verificarTipos`, que anota `tipoDado` em cada no
- * Gera uma arvore indentada onde cada no exibe 
- * sua categoria semantica o operando/valor e o tipo inferido
- * @param raiz Ponteiro para a raiz da AST ja atribuida
- * @param arquivo Caminho do arquivo Markdown de saida
- */
-void exportarArvoreAtribuida(ASTNode *raiz, const std::string &arquivo);
 
 /**
  * @brief Exporta o relatorio de erros lexicos, sintaticos e semanticos em Markdown

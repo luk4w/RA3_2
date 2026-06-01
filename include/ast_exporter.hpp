@@ -29,6 +29,7 @@ inline std::string nodeTypeToString(ASTNodeType tipo) {
         case ASTNodeType::MEMORIA_STORE: return "MEMORIA_STORE";
         case ASTNodeType::MEMORIA_RES: return "MEMORIA_RES";
         case ASTNodeType::NUMERO_LITERAL: return "NUMERO_LITERAL";
+        case ASTNodeType::BOOL_LITERAL: return "BOOL_LITERAL";
         case ASTNodeType::COMANDO_WHILE: return "COMANDO_WHILE";
         case ASTNodeType::COMANDO_IFELSE: return "COMANDO_IFELSE";
         case ASTNodeType::INSTRUCAO_CMP: return "INSTRUCAO_CMP";
@@ -44,6 +45,7 @@ inline std::string buildJson(ASTNode* node, int indent = 0) {
     std::string json = "{\n";
     json += space + "  \"tipo\": \"" + nodeTypeToString(node->tipo) + "\",\n";
     json += space + "  \"tipoDado\": \"" + tipoDadoToStringJson(node->tipoDado) + "\",\n";
+    json += space + "  \"linha\": " + std::to_string(node->linha) + ",\n";
 
     if (!node->operando.empty())
         json += space + "  \"operando\": \"" + node->operando + "\",\n";

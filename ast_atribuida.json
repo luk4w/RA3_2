@@ -1,17 +1,20 @@
 {
   "tipo": "PROGRAMA",
   "tipoDado": "DESCONHECIDO",
+  "linha": 0,
   "opcode": "programa",
   "filhos": [
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 3,
       "operando": "+",
       "opcode": "VADD.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 3,
           "operando": "8",
           "opcode": "NUMERO",
           "filhos": []
@@ -19,6 +22,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 3,
           "operando": "5",
           "opcode": "NUMERO",
           "filhos": []
@@ -28,12 +32,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 4,
       "operando": "-",
       "opcode": "VSUB.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 4,
           "operando": "20",
           "opcode": "NUMERO",
           "filhos": []
@@ -41,6 +47,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 4,
           "operando": "6",
           "opcode": "NUMERO",
           "filhos": []
@@ -50,12 +57,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 5,
       "operando": "*",
       "opcode": "VMUL.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 5,
           "operando": "7",
           "opcode": "NUMERO",
           "filhos": []
@@ -63,6 +72,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 5,
           "operando": "4",
           "opcode": "NUMERO",
           "filhos": []
@@ -72,12 +82,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 5,
       "operando": "-",
       "opcode": "VSUB.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 5,
           "operando": "6",
           "opcode": "NUMERO",
           "filhos": []
@@ -85,6 +97,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 5,
           "operando": "2",
           "opcode": "NUMERO",
           "filhos": []
@@ -94,12 +107,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 6,
       "operando": "/",
       "opcode": "DIV_INT",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 6,
           "operando": "20",
           "opcode": "NUMERO",
           "filhos": []
@@ -107,6 +122,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 6,
           "operando": "6",
           "opcode": "NUMERO",
           "filhos": []
@@ -116,12 +132,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 7,
       "operando": "%",
       "opcode": "MOD_INT",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 7,
           "operando": "20",
           "opcode": "NUMERO",
           "filhos": []
@@ -129,6 +147,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 7,
           "operando": "6",
           "opcode": "NUMERO",
           "filhos": []
@@ -138,12 +157,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 8,
       "operando": "^",
       "opcode": "POW",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 8,
           "operando": "2",
           "opcode": "NUMERO",
           "filhos": []
@@ -151,6 +172,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 8,
           "operando": "5",
           "opcode": "NUMERO",
           "filhos": []
@@ -160,12 +182,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "REAL",
+      "linha": 10,
       "operando": "+",
       "opcode": "VADD.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 10,
           "operando": "3.5",
           "opcode": "NUMERO",
           "filhos": []
@@ -173,6 +197,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 10,
           "operando": "2.0",
           "opcode": "NUMERO",
           "filhos": []
@@ -182,12 +207,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "REAL",
+      "linha": 11,
       "operando": "|",
       "opcode": "VDIV.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 11,
           "operando": "9.0",
           "opcode": "NUMERO",
           "filhos": []
@@ -195,6 +222,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 11,
           "operando": "2.0",
           "opcode": "NUMERO",
           "filhos": []
@@ -204,12 +232,14 @@
     {
       "tipo": "MEMORIA_STORE",
       "tipoDado": "INT",
+      "linha": 12,
       "operando": "CONTADOR",
       "opcode": "VSTR.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 12,
           "operando": "50",
           "opcode": "NUMERO",
           "filhos": []
@@ -219,12 +249,14 @@
     {
       "tipo": "MEMORIA_STORE",
       "tipoDado": "REAL",
+      "linha": 13,
       "operando": "TAXA",
       "opcode": "VSTR.F64",
       "filhos": [
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 13,
           "operando": "3.5",
           "opcode": "NUMERO",
           "filhos": []
@@ -234,12 +266,14 @@
     {
       "tipo": "MEMORIA_STORE",
       "tipoDado": "BOOL",
+      "linha": 14,
       "operando": "ATIVO",
       "opcode": "VSTR.F64",
       "filhos": [
         {
-          "tipo": "UNKNOWN",
+          "tipo": "BOOL_LITERAL",
           "tipoDado": "BOOL",
+          "linha": 14,
           "operando": "TRUE",
           "opcode": "TRUE",
           "filhos": []
@@ -249,12 +283,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "INT",
+      "linha": 15,
       "operando": "+",
       "opcode": "VADD.F64",
       "filhos": [
         {
           "tipo": "MEMORIA_LOAD",
           "tipoDado": "INT",
+          "linha": 15,
           "operando": "CONTADOR",
           "opcode": "VLDR.F64",
           "filhos": []
@@ -262,12 +298,14 @@
         {
           "tipo": "MEMORIA_RES",
           "tipoDado": "INT",
+          "linha": 15,
           "operando": "RES",
           "opcode": "RES",
           "filhos": [
             {
               "tipo": "NUMERO_LITERAL",
               "tipoDado": "INT",
+              "linha": 15,
               "operando": "2",
               "opcode": "NUMERO",
               "filhos": []
@@ -279,12 +317,14 @@
     {
       "tipo": "INSTRUCAO_VFP",
       "tipoDado": "REAL",
+      "linha": 16,
       "operando": "*",
       "opcode": "VMUL.F64",
       "filhos": [
         {
           "tipo": "MEMORIA_LOAD",
           "tipoDado": "REAL",
+          "linha": 16,
           "operando": "TAXA",
           "opcode": "VLDR.F64",
           "filhos": []
@@ -292,6 +332,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "REAL",
+          "linha": 16,
           "operando": "2.0",
           "opcode": "NUMERO",
           "filhos": []
@@ -301,19 +342,22 @@
     {
       "tipo": "INSTRUCAO_CMP",
       "tipoDado": "BOOL",
+      "linha": 17,
       "operando": "!=",
       "opcode": "!=",
       "filhos": [
         {
           "tipo": "MEMORIA_LOAD",
           "tipoDado": "BOOL",
+          "linha": 17,
           "operando": "ATIVO",
           "opcode": "VLDR.F64",
           "filhos": []
         },
         {
-          "tipo": "UNKNOWN",
+          "tipo": "BOOL_LITERAL",
           "tipoDado": "BOOL",
+          "linha": 17,
           "operando": "FALSE",
           "opcode": "FALSE",
           "filhos": []
@@ -323,18 +367,21 @@
     {
       "tipo": "COMANDO_IFELSE",
       "tipoDado": "INT",
+      "linha": 18,
       "operando": "IFELSE",
       "opcode": "IFELSE",
       "filhos": [
         {
           "tipo": "INSTRUCAO_CMP",
           "tipoDado": "BOOL",
+          "linha": 18,
           "operando": ">=",
           "opcode": ">=",
           "filhos": [
             {
               "tipo": "MEMORIA_LOAD",
               "tipoDado": "INT",
+              "linha": 18,
               "operando": "CONTADOR",
               "opcode": "VLDR.F64",
               "filhos": []
@@ -342,6 +389,7 @@
             {
               "tipo": "NUMERO_LITERAL",
               "tipoDado": "INT",
+              "linha": 18,
               "operando": "50",
               "opcode": "NUMERO",
               "filhos": []
@@ -351,6 +399,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 18,
           "operando": "100",
           "opcode": "NUMERO",
           "filhos": []
@@ -358,6 +407,7 @@
         {
           "tipo": "NUMERO_LITERAL",
           "tipoDado": "INT",
+          "linha": 18,
           "operando": "200",
           "opcode": "NUMERO",
           "filhos": []
@@ -367,18 +417,21 @@
     {
       "tipo": "COMANDO_WHILE",
       "tipoDado": "INT",
+      "linha": 19,
       "operando": "WHILE",
       "opcode": "WHILE",
       "filhos": [
         {
           "tipo": "INSTRUCAO_CMP",
           "tipoDado": "BOOL",
+          "linha": 19,
           "operando": "<",
           "opcode": "<",
           "filhos": [
             {
               "tipo": "MEMORIA_LOAD",
               "tipoDado": "INT",
+              "linha": 19,
               "operando": "CONTADOR",
               "opcode": "VLDR.F64",
               "filhos": []
@@ -386,6 +439,7 @@
             {
               "tipo": "NUMERO_LITERAL",
               "tipoDado": "INT",
+              "linha": 19,
               "operando": "60",
               "opcode": "NUMERO",
               "filhos": []
@@ -395,18 +449,21 @@
         {
           "tipo": "MEMORIA_STORE",
           "tipoDado": "INT",
+          "linha": 19,
           "operando": "CONTADOR",
           "opcode": "VSTR.F64",
           "filhos": [
             {
               "tipo": "INSTRUCAO_VFP",
               "tipoDado": "INT",
+              "linha": 19,
               "operando": "+",
               "opcode": "VADD.F64",
               "filhos": [
                 {
                   "tipo": "MEMORIA_LOAD",
                   "tipoDado": "INT",
+                  "linha": 19,
                   "operando": "CONTADOR",
                   "opcode": "VLDR.F64",
                   "filhos": []
@@ -414,6 +471,7 @@
                 {
                   "tipo": "NUMERO_LITERAL",
                   "tipoDado": "INT",
+                  "linha": 19,
                   "operando": "1",
                   "opcode": "NUMERO",
                   "filhos": []
@@ -427,19 +485,22 @@
     {
       "tipo": "INSTRUCAO_CMP",
       "tipoDado": "BOOL",
+      "linha": 20,
       "operando": "!=",
       "opcode": "!=",
       "filhos": [
         {
-          "tipo": "UNKNOWN",
+          "tipo": "BOOL_LITERAL",
           "tipoDado": "BOOL",
+          "linha": 20,
           "operando": "TRUE",
           "opcode": "TRUE",
           "filhos": []
         },
         {
-          "tipo": "UNKNOWN",
+          "tipo": "BOOL_LITERAL",
           "tipoDado": "BOOL",
+          "linha": 20,
           "operando": "FALSE",
           "opcode": "FALSE",
           "filhos": []
@@ -449,30 +510,35 @@
     {
       "tipo": "MEMORIA_STORE",
       "tipoDado": "INT",
+      "linha": 21,
       "operando": "FINAL",
       "opcode": "VSTR.F64",
       "filhos": [
         {
           "tipo": "INSTRUCAO_VFP",
           "tipoDado": "INT",
+          "linha": 21,
           "operando": "^",
           "opcode": "POW",
           "filhos": [
             {
               "tipo": "INSTRUCAO_VFP",
               "tipoDado": "INT",
+              "linha": 21,
               "operando": "-",
               "opcode": "VSUB.F64",
               "filhos": [
                 {
                   "tipo": "INSTRUCAO_VFP",
                   "tipoDado": "INT",
+                  "linha": 21,
                   "operando": "*",
                   "opcode": "VMUL.F64",
                   "filhos": [
                     {
                       "tipo": "NUMERO_LITERAL",
                       "tipoDado": "INT",
+                      "linha": 21,
                       "operando": "8",
                       "opcode": "NUMERO",
                       "filhos": []
@@ -480,6 +546,7 @@
                     {
                       "tipo": "NUMERO_LITERAL",
                       "tipoDado": "INT",
+                      "linha": 21,
                       "operando": "2",
                       "opcode": "NUMERO",
                       "filhos": []
@@ -489,12 +556,14 @@
                 {
                   "tipo": "INSTRUCAO_VFP",
                   "tipoDado": "INT",
+                  "linha": 21,
                   "operando": "+",
                   "opcode": "VADD.F64",
                   "filhos": [
                     {
                       "tipo": "NUMERO_LITERAL",
                       "tipoDado": "INT",
+                      "linha": 21,
                       "operando": "3",
                       "opcode": "NUMERO",
                       "filhos": []
@@ -502,6 +571,7 @@
                     {
                       "tipo": "NUMERO_LITERAL",
                       "tipoDado": "INT",
+                      "linha": 21,
                       "operando": "1",
                       "opcode": "NUMERO",
                       "filhos": []
@@ -513,6 +583,7 @@
             {
               "tipo": "NUMERO_LITERAL",
               "tipoDado": "INT",
+              "linha": 21,
               "operando": "2",
               "opcode": "NUMERO",
               "filhos": []
@@ -524,6 +595,7 @@
     {
       "tipo": "MEMORIA_LOAD",
       "tipoDado": "INT",
+      "linha": 22,
       "operando": "FINAL",
       "opcode": "VLDR.F64",
       "filhos": []

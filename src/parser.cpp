@@ -355,9 +355,11 @@ Derivacao parsear(const vector<TokenData> &tokens,
             }
             else if (topo == "TRUE" || topo == "FALSE")
             {
+                // O tipo (BOOL) e atribuido na fase semantica por verificarTipos,
+                // mantendo a arvore inicial (Fase 2) puramente sintatica: todos os
+                // nos nascem com tipoDado=DESCONHECIDO e so a aumentacao semantica os tipa.
                 ASTNode *no = new ASTNode(ASTNodeType::BOOL_LITERAL, linhaAtual,
                                           topo, valorReal);
-                no->tipoDado = TipoDado::BOOL;
                 pilhaFrames.top().push_back(no);
                 avancar();
             }

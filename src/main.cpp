@@ -231,6 +231,12 @@ int main(int argc, char *argv[])
     TabelaSimbolos tabelaSimbolos;
     construirTabelaSimbolos(arvore, tabelaSimbolos, erros);
 
+    // Snapshot da arvore sintatica INICIAL (saida da Fase 2), capturado ANTES da
+    // anotacao de tipos: todos os nos ainda com tipoDado=DESCONHECIDO. Serializa
+    // agora para evidenciar o "antes" da aumentacao semantica; so e escrito em
+    // arquivo no bloco de sucesso, junto da atribuida, para o par ser da mesma execucao.
+    std::string jsonArvoreInicial = buildJson(arvore);
+
     // Geracao da arvore sintatica atribuida (aumentada)
     // verifica/infere os tipos e anota tipoDado em cada no e na tabela
     gerarArvoreAtribuida(arvore, tabelaSimbolos, erros);
@@ -295,8 +301,18 @@ int main(int argc, char *argv[])
     // ja atribuida com os tipos inferidos por verificarTipos
     if (arvore)
     {
-        exportarAST(arvore, "ast_saida.json");
-        exportarArvoreAtribuida(arvore, "ARVORE_ATRIBUIDA.md");
+        // Arvore inicial (Fase 2): snapshot capturado antes da anotacao de tipos.
+        // O contraste com ast_atribuida.json evidencia a aumentacao semantica (a coluna
+        // tipoDado sai de DESCONHECIDO para INT/REAL/BOOL).
+        ofstream astInicialFile("ast_inicial.json");
+        if (astInicialFile.is_open())
+        {
+            astInicialFile << jsonArvoreInicial;
+            astInicialFile.close();
+            cout << "AST inicial exportada com sucesso para: ast_inicial.json\n";
+        }
+
+        exportarAST(arvore, "ast_atribuida.json");
     }
 
     // Geracao de codigo Assembly ARMv7 para Cpulator-ARMv7 DEC1-SOC(v16.1)

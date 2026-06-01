@@ -1,0 +1,604 @@
+{
+  "tipo": "PROGRAMA",
+  "tipoDado": "DESCONHECIDO",
+  "linha": 0,
+  "opcode": "programa",
+  "filhos": [
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 3,
+      "operando": "+",
+      "opcode": "VADD.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 3,
+          "operando": "8",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 3,
+          "operando": "5",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 4,
+      "operando": "-",
+      "opcode": "VSUB.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 4,
+          "operando": "20",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 4,
+          "operando": "6",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 5,
+      "operando": "*",
+      "opcode": "VMUL.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 5,
+          "operando": "7",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 5,
+          "operando": "4",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 5,
+      "operando": "-",
+      "opcode": "VSUB.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 5,
+          "operando": "6",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 5,
+          "operando": "2",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 6,
+      "operando": "/",
+      "opcode": "DIV_INT",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 6,
+          "operando": "20",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 6,
+          "operando": "6",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 7,
+      "operando": "%",
+      "opcode": "MOD_INT",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 7,
+          "operando": "20",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 7,
+          "operando": "6",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 8,
+      "operando": "^",
+      "opcode": "POW",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 8,
+          "operando": "2",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 8,
+          "operando": "5",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 10,
+      "operando": "+",
+      "opcode": "VADD.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 10,
+          "operando": "3.5",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 10,
+          "operando": "2.0",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 11,
+      "operando": "|",
+      "opcode": "VDIV.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 11,
+          "operando": "9.0",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 11,
+          "operando": "2.0",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "MEMORIA_STORE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 12,
+      "operando": "CONTADOR",
+      "opcode": "VSTR.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 12,
+          "operando": "50",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "MEMORIA_STORE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 13,
+      "operando": "TAXA",
+      "opcode": "VSTR.F64",
+      "filhos": [
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 13,
+          "operando": "3.5",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "MEMORIA_STORE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 14,
+      "operando": "ATIVO",
+      "opcode": "VSTR.F64",
+      "filhos": [
+        {
+          "tipo": "BOOL_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 14,
+          "operando": "TRUE",
+          "opcode": "TRUE",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 15,
+      "operando": "+",
+      "opcode": "VADD.F64",
+      "filhos": [
+        {
+          "tipo": "MEMORIA_LOAD",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 15,
+          "operando": "CONTADOR",
+          "opcode": "VLDR.F64",
+          "filhos": []
+        },
+        {
+          "tipo": "MEMORIA_RES",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 15,
+          "operando": "RES",
+          "opcode": "RES",
+          "filhos": [
+            {
+              "tipo": "NUMERO_LITERAL",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 15,
+              "operando": "2",
+              "opcode": "NUMERO",
+              "filhos": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_VFP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 16,
+      "operando": "*",
+      "opcode": "VMUL.F64",
+      "filhos": [
+        {
+          "tipo": "MEMORIA_LOAD",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 16,
+          "operando": "TAXA",
+          "opcode": "VLDR.F64",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 16,
+          "operando": "2.0",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_CMP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 17,
+      "operando": "!=",
+      "opcode": "!=",
+      "filhos": [
+        {
+          "tipo": "MEMORIA_LOAD",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 17,
+          "operando": "ATIVO",
+          "opcode": "VLDR.F64",
+          "filhos": []
+        },
+        {
+          "tipo": "BOOL_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 17,
+          "operando": "FALSE",
+          "opcode": "FALSE",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "COMANDO_IFELSE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 18,
+      "operando": "IFELSE",
+      "opcode": "IFELSE",
+      "filhos": [
+        {
+          "tipo": "INSTRUCAO_CMP",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 18,
+          "operando": ">=",
+          "opcode": ">=",
+          "filhos": [
+            {
+              "tipo": "MEMORIA_LOAD",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 18,
+              "operando": "CONTADOR",
+              "opcode": "VLDR.F64",
+              "filhos": []
+            },
+            {
+              "tipo": "NUMERO_LITERAL",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 18,
+              "operando": "50",
+              "opcode": "NUMERO",
+              "filhos": []
+            }
+          ]
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 18,
+          "operando": "100",
+          "opcode": "NUMERO",
+          "filhos": []
+        },
+        {
+          "tipo": "NUMERO_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 18,
+          "operando": "200",
+          "opcode": "NUMERO",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "COMANDO_WHILE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 19,
+      "operando": "WHILE",
+      "opcode": "WHILE",
+      "filhos": [
+        {
+          "tipo": "INSTRUCAO_CMP",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 19,
+          "operando": "<",
+          "opcode": "<",
+          "filhos": [
+            {
+              "tipo": "MEMORIA_LOAD",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 19,
+              "operando": "CONTADOR",
+              "opcode": "VLDR.F64",
+              "filhos": []
+            },
+            {
+              "tipo": "NUMERO_LITERAL",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 19,
+              "operando": "60",
+              "opcode": "NUMERO",
+              "filhos": []
+            }
+          ]
+        },
+        {
+          "tipo": "MEMORIA_STORE",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 19,
+          "operando": "CONTADOR",
+          "opcode": "VSTR.F64",
+          "filhos": [
+            {
+              "tipo": "INSTRUCAO_VFP",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 19,
+              "operando": "+",
+              "opcode": "VADD.F64",
+              "filhos": [
+                {
+                  "tipo": "MEMORIA_LOAD",
+                  "tipoDado": "DESCONHECIDO",
+                  "linha": 19,
+                  "operando": "CONTADOR",
+                  "opcode": "VLDR.F64",
+                  "filhos": []
+                },
+                {
+                  "tipo": "NUMERO_LITERAL",
+                  "tipoDado": "DESCONHECIDO",
+                  "linha": 19,
+                  "operando": "1",
+                  "opcode": "NUMERO",
+                  "filhos": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tipo": "INSTRUCAO_CMP",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 20,
+      "operando": "!=",
+      "opcode": "!=",
+      "filhos": [
+        {
+          "tipo": "BOOL_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 20,
+          "operando": "TRUE",
+          "opcode": "TRUE",
+          "filhos": []
+        },
+        {
+          "tipo": "BOOL_LITERAL",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 20,
+          "operando": "FALSE",
+          "opcode": "FALSE",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "tipo": "MEMORIA_STORE",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 21,
+      "operando": "FINAL",
+      "opcode": "VSTR.F64",
+      "filhos": [
+        {
+          "tipo": "INSTRUCAO_VFP",
+          "tipoDado": "DESCONHECIDO",
+          "linha": 21,
+          "operando": "^",
+          "opcode": "POW",
+          "filhos": [
+            {
+              "tipo": "INSTRUCAO_VFP",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 21,
+              "operando": "-",
+              "opcode": "VSUB.F64",
+              "filhos": [
+                {
+                  "tipo": "INSTRUCAO_VFP",
+                  "tipoDado": "DESCONHECIDO",
+                  "linha": 21,
+                  "operando": "*",
+                  "opcode": "VMUL.F64",
+                  "filhos": [
+                    {
+                      "tipo": "NUMERO_LITERAL",
+                      "tipoDado": "DESCONHECIDO",
+                      "linha": 21,
+                      "operando": "8",
+                      "opcode": "NUMERO",
+                      "filhos": []
+                    },
+                    {
+                      "tipo": "NUMERO_LITERAL",
+                      "tipoDado": "DESCONHECIDO",
+                      "linha": 21,
+                      "operando": "2",
+                      "opcode": "NUMERO",
+                      "filhos": []
+                    }
+                  ]
+                },
+                {
+                  "tipo": "INSTRUCAO_VFP",
+                  "tipoDado": "DESCONHECIDO",
+                  "linha": 21,
+                  "operando": "+",
+                  "opcode": "VADD.F64",
+                  "filhos": [
+                    {
+                      "tipo": "NUMERO_LITERAL",
+                      "tipoDado": "DESCONHECIDO",
+                      "linha": 21,
+                      "operando": "3",
+                      "opcode": "NUMERO",
+                      "filhos": []
+                    },
+                    {
+                      "tipo": "NUMERO_LITERAL",
+                      "tipoDado": "DESCONHECIDO",
+                      "linha": 21,
+                      "operando": "1",
+                      "opcode": "NUMERO",
+                      "filhos": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "tipo": "NUMERO_LITERAL",
+              "tipoDado": "DESCONHECIDO",
+              "linha": 21,
+              "operando": "2",
+              "opcode": "NUMERO",
+              "filhos": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tipo": "MEMORIA_LOAD",
+      "tipoDado": "DESCONHECIDO",
+      "linha": 22,
+      "operando": "FINAL",
+      "opcode": "VLDR.F64",
+      "filhos": []
+    }
+  ]
+}
