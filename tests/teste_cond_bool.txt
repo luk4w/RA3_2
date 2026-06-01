@@ -1,0 +1,12 @@
+(START)
+*{ teste: condicoes booleanas NAO-relacionais em IFELSE e WHILE }*
+(TRUE ATIVO)
+*{ IFELSE com condicao = variavel bool }*
+(((ATIVO)) (100) (200) IFELSE)
+*{ IFELSE com condicao = literal bool }*
+((TRUE) (10) (20) IFELSE)
+(0 CONTADOR)
+(FALSE FLAG)
+*{ WHILE com condicao relacional (regressao) }*
+(((CONTADOR) 3 <) (((CONTADOR) 1 +) CONTADOR) WHILE)
+(END)

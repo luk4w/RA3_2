@@ -9,7 +9,7 @@
 (3 4 ^)
 *{ comentario de linha inteira: memoria, historico e logicos }*
 (2.0 BASE)
-((BASE) (0 RES) *)
+((BASE) (3 RES) *)
 (TRUE TRUE ==)
 (((BASE) 0.0 >) ((BASE) 10.0 *) ((BASE) 2.0 |) IFELSE)
 (0.0 SOMA)

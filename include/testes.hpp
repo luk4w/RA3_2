@@ -9,6 +9,7 @@
 #include "gramatica.hpp"
 #include "ast.hpp"
 #include "semantic_analyzer.hpp"
+#include "armv7_generator.hpp"
 #include <iostream>
 #include <cassert>
 #include <sstream>
@@ -568,6 +569,81 @@ inline void testeTipoInferenciaVariavel()
     std::cout << "  -> [OK] Tipos: Inferencia de tipo de variavel pelo contexto\n";
 }
 
+inline void testeTipoPotenciaIntInt()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *pow = noOp("^", noNum("2"), noNum("5")); // (2 5 ^) -> int
+    TipoDado t = verificarTipos(pow, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::INT);
+    delete pow;
+    std::cout << "  -> [OK] Tipos: Potencia int^int -> int\n";
+}
+
+inline void testeTipoPotenciaBaseRealExpoenteInt()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *pow = noOp("^", noNum("2.5"), noNum("3")); // (2.5 3 ^) -> real (base real, expoente int)
+    TipoDado t = verificarTipos(pow, tabela, erros);
+    assert(erros.empty());
+    assert(t == TipoDado::REAL);
+    delete pow;
+    std::cout << "  -> [OK] Tipos: Potencia real^int -> real\n";
+}
+
+inline void testeTipoPotenciaExpoenteRealErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    ASTNode *pow = noOp("^", noNum("2.0"), noNum("0.5")); // (2.0 0.5 ^) -> expoente real -> erro
+    verificarTipos(pow, tabela, erros);
+    assert(!erros.empty());
+    assert(erros[0].mensagem.find("expoente") != std::string::npos);
+    delete pow;
+    std::cout << "  -> [OK] Tipos: Potencia com expoente real dispara erro\n";
+}
+
+inline void testeTipoResHerdaTipoDoHistorico()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (10 5 +) ; (0 RES) -> (0 RES) herda o tipo do ultimo resultado (INT)
+    ASTNode *raiz = new ASTNode(ASTNodeType::PROGRAMA, 0, "programa");
+    raiz->filhos.push_back(noOp("+", noNum("10"), noNum("5")));
+    ASTNode *res = new ASTNode(ASTNodeType::MEMORIA_RES, 2, "RES", "RES");
+    res->filhos.push_back(noNum("0", 2));
+    raiz->filhos.push_back(res);
+    verificarTipos(raiz, tabela, erros);
+    assert(erros.empty());
+    assert(res->tipoDado == TipoDado::INT);
+    delete raiz;
+    std::cout << "  -> [OK] Tipos: (N RES) herda o tipo do resultado no historico\n";
+}
+
+inline void testeTipoResRecuperaBoolErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (TRUE) ; ((0 RES) 5 +) -> recupera bool via RES e soma com int -> erro
+    ASTNode *raiz = new ASTNode(ASTNodeType::PROGRAMA, 0, "programa");
+    raiz->filhos.push_back(new ASTNode(ASTNodeType::BOOL_LITERAL, 1, "TRUE", "TRUE"));
+    ASTNode *res = new ASTNode(ASTNodeType::MEMORIA_RES, 2, "RES", "RES");
+    res->filhos.push_back(noNum("0", 2));
+    raiz->filhos.push_back(noOp("+", res, noNum("5", 2), 2));
+    verificarTipos(raiz, tabela, erros);
+    assert(!erros.empty());
+    bool achou = false;
+    for (const auto &e : erros)
+        if (e.mensagem.find("numericos") != std::string::npos &&
+            e.mensagem.find("BOOL") != std::string::npos)
+            achou = true;
+    assert(achou);
+    delete raiz;
+    std::cout << "  -> [OK] Tipos: bool recuperado por (N RES) em aritmetica dispara erro\n";
+}
+
 inline void executarTestesEtapa4()
 {
     std::cout << "\nRODANDO TESTES UNITARIOS: VERIFICACAO DE TIPOS\n";
@@ -580,7 +656,60 @@ inline void executarTestesEtapa4()
     testeTipoIfelseCondNaoBoolErro();
     testeTipoReatribuicaoIncompativelErro();
     testeTipoInferenciaVariavel();
+    testeTipoPotenciaIntInt();
+    testeTipoPotenciaBaseRealExpoenteInt();
+    testeTipoPotenciaExpoenteRealErro();
+    testeTipoResHerdaTipoDoHistorico();
+    testeTipoResRecuperaBoolErro();
     std::cout << "[SUCESSO] Verificacao de Tipos validada!\n";
+}
+
+// TESTES DE GERACAO DE ASSEMBLY
+
+inline void testeAssemblyCondicaoBoolLiteral()
+{
+    // IFELSE com condicao = literal bool (nao-relacional)
+    // gera o push do 1.0/0.0 e testa com zero (VCMP #0.0 + BEQ)
+    auto d = _parsearEntrada("(START)\n((TRUE) (100) (200) IFELSE)\n(END)");
+    std::string asmCode;
+    gerarAssembly(d.raiz, asmCode);
+    assert(asmCode.find("Literal Logico") != std::string::npos);
+    assert(asmCode.find("VCMP.F64 D0, #0.0") != std::string::npos);
+    assert(asmCode.find("BEQ else_label") != std::string::npos);
+    delete d.raiz;
+    std::cout << "  -> [OK] Assembly: condicao bool nao-relacional (VCMP #0.0 + BEQ)\n";
+}
+
+inline void testeAssemblyCondicaoRelacional()
+{
+    // IFELSE com condicao relacional (==) usa VCMP de dois operandos + branch inverso (BNE)
+    auto d = _parsearEntrada("(START)\n((1 1 ==) (100) (200) IFELSE)\n(END)");
+    std::string asmCode;
+    gerarAssembly(d.raiz, asmCode);
+    assert(asmCode.find("VCMP.F64 D0, D1") != std::string::npos);
+    assert(asmCode.find("BNE else_label") != std::string::npos);
+    delete d.raiz;
+    std::cout << "  -> [OK] Assembly: condicao relacional (VCMP D0,D1 + branch inverso)\n";
+}
+
+inline void testeAssemblyPotenciaGeraLaco()
+{
+    // (2 5 ^) gera o laco da potenciacao
+    auto d = _parsearEntrada("(START)\n(2 5 ^)\n(END)");
+    std::string asmCode;
+    gerarAssembly(d.raiz, asmCode);
+    assert(asmCode.find("pow_loop_") != std::string::npos);
+    delete d.raiz;
+    std::cout << "  -> [OK] Assembly: potenciacao gera laco pow_loop\n";
+}
+
+inline void executarTestesEtapa5()
+{
+    std::cout << "\nRODANDO TESTES UNITARIOS: GERACAO DE ASSEMBLY\n";
+    testeAssemblyCondicaoBoolLiteral();
+    testeAssemblyCondicaoRelacional();
+    testeAssemblyPotenciaGeraLaco();
+    std::cout << "[SUCESSO] Geracao de Assembly validada!\n";
 }
 
 inline void executarTodosTestes()
@@ -589,4 +718,5 @@ inline void executarTodosTestes()
     executarTestesEtapa2();
     executarTestesEtapa3();
     executarTestesEtapa4();
+    executarTestesEtapa5();
 }
