@@ -43,33 +43,40 @@ O julgamento `Γ ⊢ e : τ` lê-se *"no contexto de tipos `Γ` (a tabela de sí
 
 ## 2. Memórias (Variáveis)
 
-**Uso - `(MEM)`**
-(o tipo vem do contexto, exige definição prévia):
+> Construção de `Γ` em duas fases. Antes da tipagem, `construirTabelaSimbolos` percorre a árvore e insere em `Γ` toda memória definida por um `(V MEM)` com o tipo ainda indeterminado, escrito `MEM : ?`
+> Em seguida `verificarTipos` percorre o programa na ordem do código-fonte e resolve esses `?` no primeiro `(V MEM)` de cada memória
+> Por isso a premissa de "primeira definição" abaixo é `(MEM : ?) \in \Gamma` (tipo ainda não fixado), e não `MEM \notin \Gamma` - refletindo exatamente o teste `sim.tipo == DESCONHECIDO` da implementação
+
+**Uso - `(MEM)`** (`T-Load`)
+O tipo vem da tabela. A memória deve ter sido definida e inicializada por um `(V MEM)` anterior; usar uma memória nunca definida é erro semântico (detectado em `construirTabelaSimbolos`):
 
 ```math
 \frac{(MEM : \tau) \in \Gamma}{\Gamma \vdash (MEM) : \tau} \quad (T\text{-}Load)
 ```
 
-**Definição / Inferência - `(V MEM)`**
-(infere o tipo de `MEM` a partir do valor `V`):
+**Definição / Inferência - `(V MEM)`** (`T-Store-Def`)
+Quando o tipo de `MEM` ainda não foi fixado (`?`), infere-se o tipo do valor `V` e grava-se em `Γ`:
 
 ```math
-\frac{\Gamma \vdash V : \tau \quad MEM \notin \Gamma}{\Gamma, MEM : \tau \vdash (V \ MEM) : \tau} \quad (T\text{-}Store\text{-}Def)
+\frac{\Gamma \vdash V : \tau \quad (MEM : ?) \in \Gamma \quad \tau \neq ?}{\Gamma[MEM \mapsto \tau] \vdash (V \ MEM) : \tau} \quad (T\text{-}Store\text{-}Def)
 ```
 
-**Reatribuição Permitida**
-(tipagem forte: o tipo se mantém):
+**Reatribuição Permitida** (`T-Store-Ok`)
+Tipo já fixado e o valor tem o mesmo tipo: a tipagem forte é respeitada e o tipo se mantém:
 
 ```math
-\frac{\Gamma \vdash V : \tau \quad (MEM : \tau) \in \Gamma}{\Gamma \vdash (V \ MEM) : \tau} \quad (T\text{-}Store\text{-}Ok)
+\frac{\Gamma \vdash V : \tau \quad (MEM : \tau) \in \Gamma \quad \tau \neq ?}{\Gamma \vdash (V \ MEM) : \tau} \quad (T\text{-}Store\text{-}Ok)
 ```
 
-**Reatribuição Inválida**
-(gera erro semântico):
+**Reatribuição Inválida** (`T-Store-Err`)
+Tipo já fixado e o valor tem tipo diferente (ambos conhecidos): erro semântico:
 
 ```math
-\frac{\Gamma \vdash V : \tau' \quad (MEM : \tau) \in \Gamma \quad \tau \neq \tau'}{\text{Erro Semântico}} \quad (T\text{-}Store\text{-}Err)
+\frac{\Gamma \vdash V : \tau' \quad (MEM : \tau) \in \Gamma \quad \tau \neq ? \quad \tau' \neq ? \quad \tau \neq \tau'}{\text{Erro Semântico}} \quad (T\text{-}Store\text{-}Err)
 ```
+
+> Recuperação: se `MEM` já tem tipo fixado e o valor `V` é `?` por um erro anterior nenhuma das regras de reatribuição engatilha
+> o `(V MEM)` conserva o tipo já registrado de `MEM` e evita falsos positivos em cascata
 
 ## 3. Resultado Anterior - `(N RES)`
 
