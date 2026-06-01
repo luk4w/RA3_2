@@ -76,7 +76,7 @@ Exemplos com os arquivos de teste fornecidos na pasta `tests/`:
 | :--- | :--- |
 | `tokens.txt` | Vetor de tokens da última execução (saída do analisador léxico). |
 | `ast_saida.json` | Árvore sintática **atribuída** (AST com `tipoDado` em cada nó) serializada em JSON. |
-| `saida.s` | Código Assembly ARMv7 gerado a partir da AST. |
+| `saida.s` | Código Assembly ARMv7 gerado a partir da AST. O código gerado destina-se ao processador **ARMv7 (v16.1)**, simulado no [Cpulator](https://cpulator.01xz.net/?sys=arm-de1soc). |
 
 Se o programa **contém erros**, é exibido um **relatório de erros** (com tipo `LEXICO`/`SINTATICO`/`SEMANTICO` e número da linha) e nenhum código Assembly é gerado - o processo encerra com código de saída `1`.
 
