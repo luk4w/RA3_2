@@ -74,7 +74,7 @@ std::string nomeTipoDado(TipoDado t);
  * relacionais  == < > <= >= sobre numericos do mesmo tipo -> bool; == != sobre mesmo tipo -> bool
  * IFELSE       == condicao bool; ramos then/else do mesmo tipo
  * WHILE        == condicao bool
- * (N RES)      == N deve ser int; tipo resolvido do historico de resultados (N posicoes atras)
+ * (N RES)      == N deve ser int >= 0; tipo resolvido do historico de resultados (N posicoes atras)
  *
  * Anota `tipoDado` em cada no visitado e infere o tipo das variaveis na tabela
  * DESCONHECIDO funciona como coringa na recuperacao de erro para evitar falsos positivos em cascata

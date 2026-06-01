@@ -439,19 +439,27 @@ static TipoDado verificarTiposImpl(ASTNode *raiz, TabelaSimbolos &tabela,
                 erroTipo(erros, raiz->linha,
                          "o indice N de (N RES) deve ser inteiro, encontrado " + nomeTipoDado(tipoN));
 
-            // pega o tipo do resultado N posicoes atras no historico
-            if (no_n->tipo == ASTNodeType::NUMERO_LITERAL)
+            // N literal: valida nao negativo e pega o tipo N posicoes atras no historico
+            if (no_n->tipo == ASTNodeType::NUMERO_LITERAL &&
+                no_n->operando.find('.') == std::string::npos)
             {
                 try
                 {
                     long n = std::stol(no_n->operando);
-                    long idx = (long)historico.size() - 1 - n;
-                    if (n >= 0 && idx >= 0 && idx < (long)historico.size())
-                        tipoResultado = historico[(size_t)idx];
+                    if (n < 0)
+                        // FASE3: N e um inteiro nao negativo
+                        erroTipo(erros, raiz->linha,
+                                 "o indice N de (N RES) deve ser nao negativo, encontrado " + no_n->operando);
+                    else
+                    {
+                        long idx = (long)historico.size() - 1 - n;
+                        if (idx >= 0 && idx < (long)historico.size())
+                            tipoResultado = historico[(size_t)idx];
+                    }
                 }
                 catch (...)
                 {
-                    // N nao e numero, deixa DESCONHECIDO
+                    // numero fora do alcance de long, deixa DESCONHECIDO
                 }
             }
         }

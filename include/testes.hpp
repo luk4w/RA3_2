@@ -644,6 +644,27 @@ inline void testeTipoResRecuperaBoolErro()
     std::cout << "  -> [OK] Tipos: bool recuperado por (N RES) em aritmetica dispara erro\n";
 }
 
+inline void testeTipoResIndiceNegativoErro()
+{
+    std::vector<ErroAnalise> erros;
+    TabelaSimbolos tabela;
+    // (1 2 +) ; (-1 RES) -> indice negativo -> erro
+    ASTNode *raiz = new ASTNode(ASTNodeType::PROGRAMA, 0, "programa");
+    raiz->filhos.push_back(noOp("+", noNum("1"), noNum("2")));
+    ASTNode *res = new ASTNode(ASTNodeType::MEMORIA_RES, 2, "RES", "RES");
+    res->filhos.push_back(noNum("-1", 2));
+    raiz->filhos.push_back(res);
+    verificarTipos(raiz, tabela, erros);
+    assert(!erros.empty());
+    bool achou = false;
+    for (const auto &e : erros)
+        if (e.mensagem.find("nao negativo") != std::string::npos)
+            achou = true;
+    assert(achou);
+    delete raiz;
+    std::cout << "  -> [OK] Tipos: (N RES) com indice negativo dispara erro\n";
+}
+
 inline void executarTestesEtapa4()
 {
     std::cout << "\nRODANDO TESTES UNITARIOS: VERIFICACAO DE TIPOS\n";
@@ -661,6 +682,7 @@ inline void executarTestesEtapa4()
     testeTipoPotenciaExpoenteRealErro();
     testeTipoResHerdaTipoDoHistorico();
     testeTipoResRecuperaBoolErro();
+    testeTipoResIndiceNegativoErro();
     std::cout << "[SUCESSO] Verificacao de Tipos validada!\n";
 }
 
