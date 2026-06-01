@@ -32,7 +32,7 @@
 (3.14 VAL_BOOL) *{ reatribui bool com real }*
 
 *{ 7. Erro: Falha ao carregar memoria inexistente }*
-((VARIAVEL_FANTASMA) 1 +)
+((VARIAVELFANTASMA) 1 +)
 
 *{ 8. Erro: Tentativa de operacao com tipo logico onde exige-se numero }*
 ((VAL_BOOL) (VAL_BOOL) +)

@@ -2,13 +2,13 @@
 *{ teste4: programa valido - integracao complexa com variaveis int, real e bool }*
 (100 LIMITE_INT)
 (0.5 FATOR_REAL)
-(FALSE FLAG_BOOL)
+(FALSE FLAGBOOL)
 
 *{ Atualiza a variavel bool baseada em uma expressao relacional }*
-(((LIMITE_INT) 50 >=) FLAG_BOOL)
+(((LIMITE_INT) 50 >=) FLAGBOOL)
 
 *{ Usa a variavel bool na condicao do WHILE }*
-(((FLAG_BOOL) TRUE ==) (((LIMITE_INT) 10 -) LIMITE_INT) WHILE)
+(((FLAGBOOL) TRUE ==) (((LIMITE_INT) 10 -) LIMITE_INT) WHILE)
 
 *{ Usando divisao real, divisao inteira e resto corretamente }*
 ((LIMITE_INT) 3 /)
